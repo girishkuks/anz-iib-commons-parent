@@ -3,17 +3,15 @@
  */
 package com.anz.common.cache.data;
 
-import static org.junit.Assert.*;
-
-import java.awt.image.SampleModel;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.anz.common.cache.ICachePojo;
-import com.anz.common.cache.impl.AbstractCacheManager;
 import com.anz.common.cache.pojo.CachePojoSample;
+import com.anz.common.transform.TransformUtils;
 
 /**
  * @author root
@@ -30,8 +28,8 @@ public class DataSourceSampleTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		ds = new StaticInMemoryDataSource();
-		obj = (CachePojoSample) ds.getObjectFromSource("SampleKey", CachePojoSample.class);
+		ds = StaticInMemoryDataSource.getInstance();
+		obj = TransformUtils.fromJSON(ds.get("SampleKey"), CachePojoSample.class);
 
 	}
 

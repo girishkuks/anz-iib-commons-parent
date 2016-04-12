@@ -5,7 +5,7 @@ package com.anz.common.cache.pojo;
 
 import java.io.Serializable;
 
-import com.anz.common.cache.impl.AbstractCachePojo;
+import com.anz.common.cache.AbstractCachePojo;
 
 /**
  * @author sanketsw

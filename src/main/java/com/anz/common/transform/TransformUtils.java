@@ -15,13 +15,13 @@ public class TransformUtils {
 	
 	/**
 	 * Convert the JSON string to a Java Pojo Object
+	 * @param <T>
 	 * @param jsonString
-	 * @param transformPojoClass
+	 * @param pojoClassType
 	 * @return Java Pojo Object
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static ITransformPojo fromJSON(String jsonString, Class transformPojoClass) {
-		ITransformPojo obj = (ITransformPojo) new Gson().fromJson(jsonString, transformPojoClass);
+	public static <T> T fromJSON(String jsonString, Class<T> pojoClassType) {
+		T obj = new Gson().fromJson(jsonString, pojoClassType);
 		return obj;
 	}
 	

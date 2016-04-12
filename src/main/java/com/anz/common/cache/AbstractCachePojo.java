@@ -1,9 +1,8 @@
 /**
  * 
  */
-package com.anz.common.cache.impl;
+package com.anz.common.cache;
 
-import com.anz.common.cache.ICachePojo;
 import com.google.gson.Gson;
 
 /**

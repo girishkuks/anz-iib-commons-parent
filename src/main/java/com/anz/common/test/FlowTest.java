@@ -1,21 +1,49 @@
 package com.anz.common.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import static org.junit.Assert.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.ibm.broker.config.proxy.AttributeConstants;
 import com.ibm.broker.config.proxy.BrokerProxy;
+import com.ibm.broker.config.proxy.Checkpoint;
 import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
 import com.ibm.broker.config.proxy.ConfigManagerProxyPropertyNotInitializedException;
 import com.ibm.broker.config.proxy.ExecutionGroupProxy;
+import com.ibm.broker.config.proxy.RecordedTestData;
 
-public abstract class FlowTest {
+public abstract class FlowTest {	
+
+	private static final Logger logger = LogManager.getLogger();
 
 	// FIXME make this configurable from system property 
-	private static final String BROKER_NODE_NAME = "Node01";
-	private static final String INTEGRATION_SERVER_NAME = "svr1";
+	private static final String BROKER_NODE_NAME = "TESTNODE_root";
+	private static final String INTEGRATION_SERVER_NAME = "default";
 
 	private static BrokerProxy brokerNodeProxy;
 	private static ExecutionGroupProxy integrationServerProxy;
@@ -45,6 +73,8 @@ public abstract class FlowTest {
 						// TODO find a better way to do event handling of asynchronous calls
 						// sleep for a second as calls above are asynchronous
 						try { Thread.sleep(1000); } catch (InterruptedException e) { }
+						
+						
 					}
 				} else {
 					fail("Integration Server " + INTEGRATION_SERVER_NAME + " is not configured in Broker Node " + BROKER_NODE_NAME + ". Please configure the Integrat before running Tests.");
@@ -62,7 +92,7 @@ public abstract class FlowTest {
 	}
 	
 	@Before
-	public void setup() throws ConfigManagerProxyPropertyNotInitializedException, ConfigManagerProxyLoggedException {
+	public void setup() throws ConfigManagerProxyPropertyNotInitializedException, ConfigManagerProxyLoggedException, IOException {
 		integrationServerProxy.clearRecordedTestData();
 
 		// enable test injection mode
@@ -81,4 +111,46 @@ public abstract class FlowTest {
 	public static ExecutionGroupProxy getIntegrationServerProxy() {
 		return integrationServerProxy;
 	}
+	
+	public Node getNodeOutput(RecordedTestData recordedTestData,
+			String node) throws XPathExpressionException, SAXException, IOException, ParserConfigurationException {
+		String outMessage = recordedTestData.getTestData().getMessage();
+		logger.debug(outMessage);
+
+		InputStream stream = new ByteArrayInputStream(outMessage.getBytes());
+		
+		// get the node such as BLOB/BLOB node from the Message Tree
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder db = dbf.newDocumentBuilder();
+	    	    
+	    Document doc = db.parse(stream);
+	    //doc.getDocumentElement().normalize();
+	    
+	    XPathFactory xPathfactory = XPathFactory.newInstance();
+	    XPath xpath = xPathfactory.newXPath();
+	    XPathExpression expr = xpath.compile(node);	    
+	    
+	    NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+	    
+		assertNotNull(nl);		
+		assertEquals(1, nl.getLength());
+		logger.info("{} = {}",node, nl.item(0).getTextContent());
+	    return nl.item(0);
+	}
+	
+	
+
+	public List<RecordedTestData> getTestDataList(String nodeUUID) throws ConfigManagerProxyPropertyNotInitializedException {
+		// get test data for verification
+		Properties filterProps = new Properties();			
+		filterProps.put(Checkpoint.PROPERTY_SOURCE_NODE_NAME, nodeUUID);			
+		List<RecordedTestData> dataList = getIntegrationServerProxy().getRecordedTestData(filterProps);
+
+		assertNotNull(dataList);
+		assertEquals(1, dataList.size());
+		logger.debug(dataList.get(0));
+		return dataList;
+				
+	}
+
 }
