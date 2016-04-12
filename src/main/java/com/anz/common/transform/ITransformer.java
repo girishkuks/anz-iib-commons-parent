@@ -7,6 +7,6 @@ package com.anz.common.transform;
  * @author sanketsw
  *
  */
-public interface ITransform {
+public interface ITransformer {
 
 }

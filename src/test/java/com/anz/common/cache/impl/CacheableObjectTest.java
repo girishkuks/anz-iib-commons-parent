@@ -41,7 +41,7 @@ public class CacheableObjectTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.CacheableObject#getKey()}.
+	 * Test method for {@link com.anz.common.cache.AbstractCachePojo#getKey()}.
 	 */
 	@Test
 	public void testGetKey() {
@@ -49,7 +49,7 @@ public class CacheableObjectTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.CacheableObject#setKey(java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.AbstractCachePojo#setKey(java.lang.String)}.
 	 */
 	@Test
 	public void testSetKey() {
@@ -58,7 +58,7 @@ public class CacheableObjectTest {
 	}
 	
 	/**
-	 * Test method for {@link com.anz.common.cache.CacheableObject#toJSON()}.
+	 * Test method for {@link com.anz.common.cache.AbstractCachePojo#toJSON()}.
 	 * @throws JSONException 
 	 */
 	@Test

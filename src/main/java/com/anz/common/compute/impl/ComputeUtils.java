@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.anz.common.compute;
+package com.anz.common.compute.impl;
 
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbJSON;

@@ -1,8 +1,9 @@
 /**
  * 
  */
-package com.anz.common.compute;
+package com.anz.common.compute.impl;
 
+import com.anz.common.compute.ICommonJavaCompute;
 import com.ibm.broker.javacompute.MbJavaComputeNode;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
@@ -15,7 +16,7 @@ import com.ibm.broker.plugin.MbUserException;
  * 
  */
 public abstract class CommonJavaCompute extends MbJavaComputeNode implements
-		ICommonComputeNode {
+		ICommonJavaCompute {
 
 	/*
 	 * (non-Javadoc)
@@ -68,51 +69,9 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 * @param outAssembly
 	 * @throws Exception
 	 */
-	public void execute(MbMessageAssembly inAssembly,
-			MbMessageAssembly outAssembly) throws Exception {
-		// Override business logic here if you need to use local environment or
-		// http header etc.
-		execute(inAssembly.getMessage(), outAssembly.getMessage());
-	}
+	public abstract void  execute(MbMessageAssembly inAssembly,
+			MbMessageAssembly outAssembly) throws Exception;
 
-	/**
-	 * Override business logic here if you merely need to transform the message
-	 * object
-	 * 
-	 * @param inMessage
-	 * @param outMessage
-	 * @throws Exception
-	 */
-	public void execute(MbMessage inMessage, MbMessage outMessage)
-			throws Exception {
-		// Overide business logic here if you merely need to transform the
-		// message object
-		if (getTransformationType().equals(TransformType.JSON_TO_JSON)) {
-			String inputJson = ComputeUtils.getJsonData(inMessage);
-			String outputJson = executeJsonToJsonTranform(inputJson);
-			if (outputJson != null) {
-				// Write this outputJson to outMessage
-				ComputeUtils.replaceJsonData(outMessage, outputJson);
-			}
-		}
-
-	}
-
-	/**
-	 * Override business logic here if you merely need to transform the message
-	 * from JSON to JSON
-	 * 
-	 * @param inputJson
-	 *            input JSON Data
-	 * @return output JSON Data to be placed in the message
-	 */
-	public String executeJsonToJsonTranform(String inputJson) throws Exception {
-		// Override business logic here if you merely need to transform the
-		// message from JSON to JSON
-		// Default implementation here: Nothing special to do. Just forward the
-		// message
-		return inputJson;
-	}
 
 	/**
 	 * Determine the global cache map name

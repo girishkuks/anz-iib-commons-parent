@@ -37,7 +37,7 @@ public class CacheDataSourceManagerTest {
 	@Test
 	public void testGetCacheDataSourceManager() {
 		assertNotNull(CacheDataSourceManager.getCacheDataSource(CachePojoSample.class));
-		assertNull(CacheDataSourceManager.getCacheDataSource(CacheManager.class));
+		assertNull(CacheDataSourceManager.getCacheDataSource(AbstractCacheManager.class));
 	}
 
 }

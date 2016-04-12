@@ -11,9 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.anz.common.cache.ICacheableObject;
+import com.anz.common.cache.ICachePojo;
 import com.anz.common.cache.bean.CachePojoSample;
-import com.anz.common.cache.impl.CacheManager;
+import com.anz.common.cache.impl.AbstractCacheManager;
 
 /**
  * @author root
@@ -21,7 +21,7 @@ import com.anz.common.cache.impl.CacheManager;
  */
 public class DataSourceSampleTest {
 
-	DataSourceSample ds;
+	StaticInMemoryDataSource ds;
 
 	CachePojoSample obj;
 
@@ -30,9 +30,8 @@ public class DataSourceSampleTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		ds = new DataSourceSample();
-		obj = (CachePojoSample) ds.getObjectFromSource("SamppleMap",
-				"SampleKey", CachePojoSample.class);
+		ds = new StaticInMemoryDataSource();
+		obj = (CachePojoSample) ds.getObjectFromSource("SampleKey", CachePojoSample.class);
 
 	}
 
@@ -45,7 +44,7 @@ public class DataSourceSampleTest {
 
 	/**
 	 * Test method for
-	 * {@link com.anz.common.cache.data.DataSourceSample#getObjectFromSource(java.lang.String, java.lang.String, java.lang.Class)}
+	 * {@link com.anz.common.cache.data.StaticInMemoryDataSource#getObjectFromSource(java.lang.String, java.lang.String, java.lang.Class)}
 	 * .
 	 */
 	@Test

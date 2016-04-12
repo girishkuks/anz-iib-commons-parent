@@ -7,7 +7,7 @@ package com.anz.common.compute;
  * @author root
  *
  */
-public interface ICommonComputeNode {
+public interface ICommonJavaCompute {
 	
 	/**
 	 * define the type of transformation this compute node is doing

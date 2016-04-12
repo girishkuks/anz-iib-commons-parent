@@ -5,7 +5,7 @@ package com.anz.common.cache.impl;
 
 import com.anz.common.cache.ICacheDataSource;
 import com.anz.common.cache.ICacheManager;
-import com.anz.common.cache.bean.CachePojoSample;
+import com.anz.common.cache.ICachePojo;
 import com.google.gson.Gson;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbGlobalMap;
@@ -15,10 +15,8 @@ import com.ibm.broker.plugin.MbGlobalMapSessionPolicy;
  * @author sanketsw
  * 
  */
-public class CacheManager implements ICacheManager {
-
-	// TODO Map object should come from a standard variable
-
+public abstract class AbstractCacheManager implements ICacheManager {
+	
 	/**
 	 * Get the cached object from the cache
 	 * 
@@ -30,14 +28,14 @@ public class CacheManager implements ICacheManager {
 	 * @return CacheableObject (Cast it to cacheablePojoClass)
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static CacheableObject lookupCache(String map, String key,
+	public ICachePojo lookupCache(String map, String key,
 			Class cacheablePojoClass, boolean fromDatSourceIfNotCached) {
-		CacheableObject obj = null;
+		ICachePojo obj = null;
 		MbGlobalMap globalMap = null;
 		try {
 			globalMap = getCacheMap(map);
 			String json = (String) globalMap.get(key);
-			obj = (CacheableObject) (json != null ? new Gson().fromJson(json,
+			obj = (ICachePojo) (json != null ? new Gson().fromJson(json,
 					cacheablePojoClass) : null);
 		} catch (Exception e) {
 			// Log here
@@ -46,13 +44,11 @@ public class CacheManager implements ICacheManager {
 		}
 		if (obj == null && globalMap != null && fromDatSourceIfNotCached) {
 			try {
-				ICacheDataSource datasource = CacheDataSourceManager
-						.getCacheDataSource(cacheablePojoClass);
+				ICacheDataSource datasource = getDataSource();
 				if (datasource == null) {
 					return obj;
 				}
-				obj = datasource.getObjectFromSource(map, key,
-						cacheablePojoClass);
+				obj = datasource.getObjectFromSource(key, cacheablePojoClass);
 				globalMap.put(key, obj.toJSON());
 			} catch (MbException e) {
 				;
@@ -69,7 +65,7 @@ public class CacheManager implements ICacheManager {
 	 * @param key
 	 * @return JSON string
 	 */
-	public static String retrieveFromCache(String map, String key) {
+	public String retrieveFromCache(String map, String key) {
 		try {
 			MbGlobalMap globalMap = getCacheMap(map);
 			String json = (String) globalMap.get(key);
@@ -88,7 +84,7 @@ public class CacheManager implements ICacheManager {
 	 * @param map
 	 * @param pojo
 	 */
-	public static void insertIntoCache(String map, CacheableObject pojo) {
+	public void insertIntoCache(String map, ICachePojo pojo) {
 		try {
 			MbGlobalMap globalMap = getCacheMap(map);
 			if (!globalMap.containsKey(pojo.getKey())) {
@@ -108,7 +104,7 @@ public class CacheManager implements ICacheManager {
 	 * @param key
 	 * @param json
 	 */
-	public static void insertIntoCache(String map, String key, String json) {
+	public void insertIntoCache(String map, String key, String json) {
 		try {
 			MbGlobalMap globalMap = getCacheMap(map);
 			if (!globalMap.containsKey(key)) {
@@ -128,7 +124,7 @@ public class CacheManager implements ICacheManager {
 	 * @return
 	 * @throws MbException
 	 */
-	public static MbGlobalMap getCacheMap(String map) throws MbException {
+	public MbGlobalMap getCacheMap(String map) throws MbException {
 		return MbGlobalMap.getGlobalMap(map, getCachePolicy());
 	}
 
@@ -137,7 +133,7 @@ public class CacheManager implements ICacheManager {
 	 * 
 	 * @return cache session policy
 	 */
-	public static MbGlobalMapSessionPolicy getCachePolicy() {
-		return new MbGlobalMapSessionPolicy(20);
+	public MbGlobalMapSessionPolicy getCachePolicy() {
+		return new MbGlobalMapSessionPolicy(getCacheTimeToLive());
 	}
 }

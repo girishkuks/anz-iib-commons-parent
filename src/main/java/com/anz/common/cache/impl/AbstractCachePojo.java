@@ -3,16 +3,14 @@
  */
 package com.anz.common.cache.impl;
 
-import java.io.Serializable;
-
-import com.anz.common.cache.ICacheableObject;
+import com.anz.common.cache.ICachePojo;
 import com.google.gson.Gson;
 
 /**
  * @author sanketsw
  *
  */
-public abstract class CacheableObject implements ICacheableObject {
+public abstract class AbstractCachePojo implements ICachePojo {
 	
 	/**
 	 * 
@@ -39,7 +37,7 @@ public abstract class CacheableObject implements ICacheableObject {
 	/**
 	 * @param key
 	 */
-	public CacheableObject(String key) {
+	public AbstractCachePojo(String key) {
 		super();
 		this.key = key;
 	}

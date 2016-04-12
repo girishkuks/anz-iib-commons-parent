@@ -5,13 +5,13 @@ package com.anz.common.cache.bean;
 
 import java.io.Serializable;
 
-import com.anz.common.cache.impl.CacheableObject;
+import com.anz.common.cache.impl.AbstractCachePojo;
 
 /**
  * @author sanketsw
  *
  */
-public class CachePojoSample extends CacheableObject {
+public class CachePojoSample extends AbstractCachePojo {
 	
 	/**
 	 * 

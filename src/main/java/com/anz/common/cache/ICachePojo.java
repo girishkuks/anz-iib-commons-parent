@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author sanketsw
  *
  */
-public interface ICacheableObject extends Serializable {
+public interface ICachePojo extends Serializable {
 	
 	/**
 	 * @return key of this cacheable object

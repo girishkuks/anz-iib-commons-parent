@@ -5,7 +5,7 @@ package com.anz.common.cache.impl;
 
 import com.anz.common.cache.ICacheDataSource;
 import com.anz.common.cache.bean.CachePojoSample;
-import com.anz.common.cache.data.DataSourceSample;
+import com.anz.common.cache.data.StaticInMemoryDataSource;
 
 /**
  * Factory of the all the datasources and decides which one to call based on the cacheable object class
@@ -22,7 +22,7 @@ public class CacheDataSourceManager {
 	@SuppressWarnings("rawtypes")
 	public static ICacheDataSource getCacheDataSource(Class cacheablePojoClass) {
 		if(cacheablePojoClass.equals(CachePojoSample.class)) {
-			return new DataSourceSample();
+			return new StaticInMemoryDataSource();
 		}
 		return null;
 	}
