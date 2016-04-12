@@ -1,7 +1,7 @@
 # anz-iib-commons
 
 Core common framework components for IIB applications. Includes
-- Cache Manager framework using JCache (JSR 7 standard)
+- Cache Manager framework using JCache (JSR 107 standard)
 - Tranformation Utils and interfaces
 - IIB Java Compute Framework
 - Sample data source for cache and sample cacheable pojo objects
@@ -27,3 +27,4 @@ json = cache.get(key);
 ```
 Helper Method: `CachePojoSample op = CacheHandlerFactory.getInstance().lookupIIBCache("DefaultMap", objectKey, CachePojoSample.class);`
 
+Reference reading: https://abhirockzz.wordpress.com/2015/02/09/sneak-peek-into-the-jcache-api-jsr-107/
