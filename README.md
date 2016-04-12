@@ -18,12 +18,12 @@ For JSON to JSON Tranformation computes,
 - Implement a class com.anz.MyTransformer) implements com.anz.common.transform.IJsonJsonTransformer. Put this in your <App-name>AppJava project
 
 
-##### How to use Cache (In progress)
+##### How to read from Cache
 ```
-CacheProvider provider = CacheProvider.getCachingProvider();
-CacheManager cacheManager = provider.getCacheManager("StaticCacheManager");
-Cache cache = cacheManager.getCache("default");
-CachePojo myPojo = (CachePojo) cache.get("myKey");
+CachingProvider provider = Caching.getCachingProvider(JCacheCachingProvider.class.getName());
+CacheManager cacheManager = provider.getCacheManager();
+Cache<String, String> cache = cacheManager.getCache("MyDefaultMap");
+json = cache.get(key);
 ```
-
+Helper Method: `CachePojoSample op = CacheHandlerFactory.getInstance().lookupIIBCache("DefaultMap", objectKey, CachePojoSample.class);`
 
