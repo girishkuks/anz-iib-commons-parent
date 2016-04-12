@@ -1,7 +1,7 @@
 # anz-iib-commons
 
 Core common framework components for IIB applications. Includes
-- Cache Manager
+- Cache Manager framework using JCache (JSR 7 standard)
 - Tranformation Utils and interfaces
 - IIB Java Compute Framework
 - Sample data source for cache and sample cacheable pojo objects
@@ -13,9 +13,9 @@ Refer to https://github.com/sanketsw/JsonJsonApplication/tree/master/JsonJsonApp
 
 ##### How to create Compute Node
 For JSON to JSON Tranformation computes, 
-- Set the Java compute class to com.anz.common.compute.impl.CommonJsonJsonTransformCompute
+- Set the Java compute class to `com.anz.common.compute.impl.CommonJsonJsonTransformCompute`
 - Set the name of the Java Compute to your transformer class (Let's say com.anz.MyTransformer)
-- Implement a class com.anz.MyTransformer) implements com.anz.common.transform.IJsonJsonTransformer. Put this in your <App-name>AppJava project
+- Implement a class com.anz.MyTransformer) implements `com.anz.common.transform.ITransformer`. Put this in your <App-name>-java project
 
 
 ##### How to read from Cache
