@@ -23,8 +23,9 @@ For JSON to JSON Tranformation computes,
 CachingProvider provider = Caching.getCachingProvider(JCacheCachingProvider.class.getName());
 CacheManager cacheManager = provider.getCacheManager();
 Cache<String, String> cache = cacheManager.getCache("MyDefaultMap");
-json = cache.get(key);
+String json = cache.get(key);
+CachePojoSample op = json != null ? new Gson().fromJson(json, cachePojoClass) : null;
 ```
-Helper Method: `CachePojoSample op = CacheHandlerFactory.getInstance().lookupIIBCache("DefaultMap", objectKey, CachePojoSample.class);`
+Or use the Helper Method: `CachePojoSample op = CacheHandlerFactory.getInstance().lookupIIBCache("DefaultMap", key, CachePojoSample.class);`
 
 Reference reading: https://abhirockzz.wordpress.com/2015/02/09/sneak-peek-into-the-jcache-api-jsr-107/
