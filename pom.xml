@@ -2,9 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.anz</groupId>
-	<artifactId>processing-core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>ProcessingCore</name>
+	<artifactId>anz-iib-commons</artifactId>
+	<version>0.0.1</version>
+	<name>anz-iib-commons</name>
+
+	<properties>
+		<log4j2.version>2.5</log4j2.version>
+	</properties>
+
 
 	<dependencies>
 		<dependency>
@@ -29,19 +34,41 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.iib</groupId>
-			<artifactId>jplugin2</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm.iib</groupId>
-			<artifactId>javacompute</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm.iib</groupId>
 			<artifactId>IntegrationAPI</artifactId>
-			<version>1.0.0</version>
+			<version>10.0.0.3</version>
+			<scope>system</scope>
+			<!-- <systemPath>/root/IIB/iib-10.0.0.3/common/classes/IntegrationAPI.jar</systemPath> -->
+			<systemPath>/root/IIB/iib-10.0.0.4/common/classes/IntegrationAPI.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>com.ibm.etools.mft</groupId>
+			<artifactId>jplugin2</artifactId>
+			<version>10.0.0.3</version>
+			<scope>system</scope>
+			<!-- <systemPath>/root/IIB/iib-10.0.0.3/tools/plugins/com.ibm.etools.mft.jcn_10.0.300.v20151113-1154/jplugin2.jar</systemPath> -->
+			<systemPath>/root/IIB/iib-10.0.0.4/tools/plugins/com.ibm.etools.mft.jcn_10.0.400.v20160310-1307/jplugin2.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.etools.mft</groupId>
+			<artifactId>javacompute</artifactId>
+			<version>10.0.0.3</version>
+			<scope>system</scope>
+			<!-- <systemPath>/root/IIB/iib-10.0.0.3/tools/plugins/com.ibm.etools.mft.jcn_10.0.300.v20151113-1154/javacompute.jar</systemPath> -->
+			<systemPath>/root/IIB/iib-10.0.0.4/tools/plugins/com.ibm.etools.mft.jcn_10.0.400.v20160310-1307/javacompute.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+
 	</dependencies>
 
 </project>
