@@ -19,9 +19,11 @@ For JSON to JSON Tranformation computes,
 
 
 ##### How to use Cache (In progress)
+```
 CacheProvider provider = CacheProvider.getCachingProvider();
 CacheManager cacheManager = provider.getCacheManager("StaticCacheManager");
 Cache cache = cacheManager.getCache("default");
 CachePojo myPojo = (CachePojo) cache.get("myKey");
+```
 
 
