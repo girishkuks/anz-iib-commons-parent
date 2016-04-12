@@ -11,8 +11,6 @@ import com.google.gson.Gson;
  */
 public class TransformUtils {
 	
-
-	
 	/**
 	 * Convert the JSON string to a Java Pojo Object
 	 * @param jsonString
@@ -34,5 +32,4 @@ public class TransformUtils {
 		String out = new Gson().toJson(pojo);
 		return out;
 	}
-
 }

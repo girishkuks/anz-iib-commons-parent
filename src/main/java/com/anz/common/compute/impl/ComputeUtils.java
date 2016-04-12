@@ -13,8 +13,6 @@ import com.ibm.broker.plugin.MbMessage;
  */
 public class ComputeUtils {
 	
-
-	
 	/** 
 	 * Converts JSON string to a message tree and assign to outMessage
 	 * @param outMessage outMessage
@@ -30,10 +28,14 @@ public class ComputeUtils {
 	    int encoding = 0;
 	    int ccsid = 0;
 	    int options = 0; 
-	    outMsgRootEl.getFirstElementByPath("JSON").detach();
-	    outMsgRootEl.createElementAsLastChildFromBitstream(outputJson.getBytes("UTF-8"),
-	    		   parserName, messageType, messageSet, messageFormat, encoding, ccsid,
-	    		   options); 
+	    MbElement JSONElement = outMsgRootEl.getFirstElementByPath("JSON");
+	    
+	    if(JSONElement != null) {
+	    	JSONElement.detach();
+		    outMsgRootEl.createElementAsLastChildFromBitstream(outputJson.getBytes("UTF-8"),
+		    		   parserName, messageType, messageSet, messageFormat, encoding, ccsid,
+		    		   options); 
+	    }
 		
 	}
 
@@ -45,9 +47,9 @@ public class ComputeUtils {
 	 */
 	public static String getJsonData(MbMessage inMessage) throws Exception {
 		MbElement jsonElem = inMessage.getRootElement().getFirstElementByPath("JSON/Data");
-		if(jsonElem == null) return null;
+		if(jsonElem == null) return "";
 		byte[] bs = jsonElem.toBitstream(null, null, null, 0, 1208, 0);
-		if(bs == null) return null;
+		if(bs == null) return "";
 	    String inputJson = new String(bs, "UTF-8");
 	    return inputJson;
 	}
