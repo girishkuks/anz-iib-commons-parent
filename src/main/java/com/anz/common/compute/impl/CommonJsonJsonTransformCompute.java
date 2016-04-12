@@ -4,7 +4,7 @@
 package com.anz.common.compute.impl;
 
 import com.anz.common.compute.TransformType;
-import com.anz.common.transform.IJsonJsonTransformer;
+import com.anz.common.transform.ITransformer;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
 
@@ -48,8 +48,9 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	 *            input JSON Data
 	 * @return output JSON Data to be placed in the message
 	 */
+	@SuppressWarnings("unchecked")
 	public String executeJsonToJsonTranform(String inputJson) throws Exception {
-		IJsonJsonTransformer jsonTransformer = (IJsonJsonTransformer)Class.forName(getName()).newInstance();
+		ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(getName()).newInstance();
 		String outJson = jsonTransformer.execute(inputJson);
 		return outJson;
 	}

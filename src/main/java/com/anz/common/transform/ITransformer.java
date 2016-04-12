@@ -3,10 +3,7 @@
  */
 package com.anz.common.transform;
 
-/**
- * @author sanketsw
- *
- */
-public interface ITransformer {
 
+public interface ITransformer<I,O> {
+	O execute(I input) throws Exception;
 }
