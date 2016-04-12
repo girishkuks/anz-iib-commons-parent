@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.anz.common.cache.bean;
+package com.anz.common.cache.pojo;
 
 import java.io.Serializable;
 

@@ -5,7 +5,7 @@ package com.anz.common.cache.data;
 
 import com.anz.common.cache.ICacheDataSource;
 import com.anz.common.cache.ICachePojo;
-import com.anz.common.cache.bean.CachePojoSample;
+import com.anz.common.cache.pojo.CachePojoSample;
 
 /**
  * Configure the data source from where the cache objects should be read from

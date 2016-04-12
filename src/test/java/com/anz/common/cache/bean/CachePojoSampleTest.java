@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.anz.common.cache.pojo.CachePojoSample;
+
 
 
 /**
@@ -40,7 +42,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.bean.CachePojoSample#OperationDetails(java.lang.String, java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#OperationDetails(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testOperationDetails() {
@@ -48,7 +50,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.bean.CachePojoSample#getImeplementation()}.
+	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#getImeplementation()}.
 	 */
 	@Test
 	public void testGetImeplementation() {
@@ -56,7 +58,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.bean.CachePojoSample#setImeplementation(java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#setImeplementation(java.lang.String)}.
 	 */
 	@Test
 	public void testSetImeplementation() {
@@ -65,7 +67,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.bean.CachePojoSample#getOperation()}.
+	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#getOperation()}.
 	 */
 	@Test
 	public void testGetOperation() {
@@ -73,7 +75,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.bean.CachePojoSample#setOperation(java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#setOperation(java.lang.String)}.
 	 */
 	@Test
 	public void testSetOperation() {

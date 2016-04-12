@@ -4,8 +4,8 @@
 package com.anz.common.cache.impl;
 
 import com.anz.common.cache.ICacheDataSource;
-import com.anz.common.cache.bean.CachePojoSample;
 import com.anz.common.cache.data.StaticInMemoryDataSource;
+import com.anz.common.cache.pojo.CachePojoSample;
 
 /**
  * Factory of the all the datasources and decides which one to call based on the cacheable object class
