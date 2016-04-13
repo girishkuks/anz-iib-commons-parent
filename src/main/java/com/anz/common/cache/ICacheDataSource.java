@@ -18,7 +18,7 @@ public interface ICacheDataSource {
 	 * @param cacheablePojoClass
 	 * @return cacheable object pojo instance
 	 */
-	public String get(String key);
+	public String get(String key) throws Exception;
 	
 	/**
 	 * Define the linked cache manager

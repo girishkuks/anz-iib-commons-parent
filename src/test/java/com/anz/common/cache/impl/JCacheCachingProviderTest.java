@@ -35,9 +35,11 @@ public class JCacheCachingProviderTest extends TestCase {
 	protected void setUp() throws Exception {
 		// TODO Auto-generated method stub
 		super.setUp();
-
-		provider = Caching
-				.getCachingProvider("com.anz.common.cache.impl.JCachingProvider");
+		if(System.getProperty("javax.cache.spi.CachingProvider") == null) {
+			logger.warn("System property javax.cache.spi.CachingProvider is not set. Setting it to com.anz.common.cache.jcache.JCacheCachingProvider...");
+			System.setProperty("javax.cache.spi.CachingProvider","com.anz.common.cache.jcache.JCacheCachingProvider");
+		}
+		provider = Caching.getCachingProvider();
 	}
 
 	private static final Logger logger = LogManager.getLogger();

@@ -10,13 +10,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.anz.common.cache.jcache.JCache;
+import com.anz.common.cache.jcache.JCacheManager;
 import com.ibm.broker.plugin.MbException;
 
 /**
  * @author sanketsw
  *
  */
-public class InMemoryCacheManager extends EXtremeScaleCacheManager {
+public class InMemoryCacheManager extends JCacheManager {
 	
 	public static final String URI = InMemoryCacheManager.class.getName();
 	

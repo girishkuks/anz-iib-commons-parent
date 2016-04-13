@@ -5,11 +5,12 @@ package com.anz.common.cache.jcache;
 
 import java.net.URI;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.configuration.Configuration;
-import javax.cache.configuration.OptionalFeature;
+import javax.cache.spi.CachingProvider;
 
 
 /**
@@ -18,14 +19,62 @@ import javax.cache.configuration.OptionalFeature;
  */
 public abstract class JCacheManager implements CacheManager {
 
+	private JCacheCachingProvider jCacheProvider;
+	private ClassLoader classLoader;
+	private URI uri;
+	private Properties properties;
+	@SuppressWarnings("rawtypes")
+	private final ConcurrentHashMap<String, Cache> allCaches = new ConcurrentHashMap<String, Cache>();
+
 	/**
-	 * @param jCacheProvider
-	 * @param classLoader
-	 * @param uri
-	 * @param properties
+	 * @return the allCaches
 	 */
-	public abstract void initiate(JCacheCachingProvider jCacheProvider, ClassLoader classLoader, URI uri,
-			Properties properties);
+	@SuppressWarnings("rawtypes")
+	public ConcurrentHashMap<String, Cache> getAllCaches() {
+		return allCaches;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see javax.cache.CacheManager#getCachingProvider()
+	 */
+	public CachingProvider getCachingProvider() {
+		return jCacheProvider;
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.cache.CacheManager#getClassLoader()
+	 */
+	public ClassLoader getClassLoader() {
+		return classLoader;
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.cache.CacheManager#getProperties()
+	 */
+	public Properties getProperties() {
+		return properties;
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.cache.CacheManager#getURI()
+	 */
+	public URI getURI() {
+		return uri;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.anz.common.cache.impl.JCacheManager#initiate(com.anz.common.cache.impl.JCacheProvider, java.lang.ClassLoader, java.net.URI, java.util.Properties)
+	 */
+	public void initiate(JCacheCachingProvider jCacheProvider, ClassLoader classLoader, URI uri,
+			Properties properties) {
+		this.jCacheProvider = jCacheProvider;
+		this.classLoader = classLoader;
+		this.uri = uri;
+		this.properties = properties;
+		
+	}
 
 
 	/* (non-Javadoc)
