@@ -21,7 +21,7 @@
 			<AppenderRef ref="Console" />
 		</Logger>
 
-		<Logger name="com.anz.common.cache.data" level="info"
+		<Logger name="com.anz.common.cache.domain" level="info"
 			additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
