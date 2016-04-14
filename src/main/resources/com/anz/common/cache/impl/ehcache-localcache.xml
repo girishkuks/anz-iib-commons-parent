@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
+	monitoring="autodetect" dynamicConfig="true">
+	<!-- see http://www.ehcache.org/ehcache.xml -->
+	<defaultCache maxEntriesLocalHeap="200000" eternal="false"
+		timeToIdleSeconds="40" timeToLiveSeconds="40">
+		<persistence strategy="localTempSwap" />
+	</defaultCache>
+</ehcache>

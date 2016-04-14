@@ -1,15 +1,12 @@
 package com.anz.common.cache.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 
 import junit.framework.TestCase;
@@ -18,13 +15,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
+import com.anz.common.cache.jcache.JCacheCachingProvider;
+
 /**
  * @author sanketsw
  * 
  */
-public class JCacheCachingProviderTest extends TestCase {
+public class ehCacheCachingProviderTest extends TestCase {
 
-	CachingProvider provider;
+	private static final Logger logger = LogManager.getLogger();
+
+	private CachingProvider provider;
+	private CacheManager cacheManager;
+	private Cache cache;
 
 	/*
 	 * (non-Javadoc)
@@ -35,19 +38,12 @@ public class JCacheCachingProviderTest extends TestCase {
 	protected void setUp() throws Exception {
 		// TODO Auto-generated method stub
 		super.setUp();
-		if(System.getProperty("javax.cache.spi.CachingProvider") == null) {
-			logger.warn("System property javax.cache.spi.CachingProvider is not set. Setting it to com.anz.common.cache.jcache.JCacheCachingProvider...");
-			System.setProperty("javax.cache.spi.CachingProvider","com.anz.common.cache.jcache.JCacheCachingProvider");
-		}
-		provider = Caching.getCachingProvider();
+		provider = Caching.getCachingProvider("org.ehcache.jcache.JCacheCachingProvider");
+		cacheManager = provider.getCacheManager();		
 	}
-
-	private static final Logger logger = LogManager.getLogger();
 
 	@Test
 	public void testGetCacheManager() throws URISyntaxException {
-		CacheManager cacheManager = provider.getCacheManager(new URI(
-				InMemoryCacheManager.URI), null);
 		logger.info(cacheManager);
 		assertNotNull(cacheManager);
 	}
@@ -60,19 +56,27 @@ public class JCacheCachingProviderTest extends TestCase {
 
 	@Test
 	public void testCache() throws URISyntaxException {
-		CacheManager cacheManager = provider.getCacheManager(new URI(
-				InMemoryCacheManager.URI), null);
-		Cache<String, String> cache = cacheManager.getCache("testCache");
+		getCache();
 		logger.info(cache);
 		assertNotNull(cache);
 	}
 
+
+	private void getCache() {
+
+		cache = cacheManager.getCache("testCache", String.class, String.class);
+		if (cache == null) {
+			MutableConfiguration<String, String> jcacheConfig = new MutableConfiguration<String, String>();
+			jcacheConfig.setTypes(String.class, String.class);
+			// create cache
+			cache = cacheManager.createCache("testCache", jcacheConfig);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testElementsInCache() throws URISyntaxException {
-		CacheManager cacheManager = provider.getCacheManager(new URI(
-				InMemoryCacheManager.URI), null);
-		Cache<String, String> cache = cacheManager.getCache("testCache");
-
+		getCache();
 		assertNull(cache.get("testElem"));
 
 		cache.put("testElem", "Testing elements in cache");

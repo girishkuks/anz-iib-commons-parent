@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.anz.common.cache.domain.CachePojoSampleDomain;
 import com.anz.common.cache.pojo.CachePojoSample;
 import com.anz.common.transform.TransformUtils;
 
@@ -19,7 +20,7 @@ import com.anz.common.transform.TransformUtils;
  */
 public class DataSourceSampleTest {
 
-	StaticInMemoryDataSource ds;
+	CachePojoSampleDomain ds;
 
 	CachePojoSample obj;
 
@@ -28,9 +29,8 @@ public class DataSourceSampleTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		ds = StaticInMemoryDataSource.getInstance();
-		obj = TransformUtils.fromJSON(ds.get("SampleKey"), CachePojoSample.class);
-
+		ds = CachePojoSampleDomain.getInstance();
+		obj = ds.getOperation("SampleKey");
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class DataSourceSampleTest {
 
 	/**
 	 * Test method for
-	 * {@link com.anz.common.cache.data.StaticInMemoryDataSource#getObjectFromSource(java.lang.String, java.lang.String, java.lang.Class)}
+	 * {@link com.anz.common.cache.domain.CachePojoSampleDomain#getObjectFromSource(java.lang.String, java.lang.String, java.lang.Class)}
 	 * .
 	 */
 	@Test

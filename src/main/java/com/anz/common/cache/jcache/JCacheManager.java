@@ -80,8 +80,8 @@ public abstract class JCacheManager implements CacheManager {
 	/* (non-Javadoc)
 	 * @see javax.cache.CacheManager#getCache(java.lang.String, java.lang.Class, java.lang.Class)
 	 */
-	public <K, V> Cache<K, V> getCache(String arg0, Class<K> arg1, Class<V> arg2) {
-		throw new UnsupportedOperationException("Not applicable");
+	public <K, V> Cache<K, V> getCache(String cacheName, Class<K> arg1, Class<V> arg2) {
+		return getCache(cacheName);
 	}
 
 	/* (non-Javadoc)
@@ -111,15 +111,7 @@ public abstract class JCacheManager implements CacheManager {
 	 */
 	public <K, V, C extends Configuration<K, V>> Cache<K, V> createCache(
 			String cacheName, C configuration) throws IllegalArgumentException {
-		throw new UnsupportedOperationException("Not applicable");		
-	}
-
-
-	/* (non-Javadoc)
-	 * @see javax.cache.CacheManager#getCache(java.lang.String)
-	 */
-	public <K, V> Cache<K, V> getCache(String cacheName) {
-		throw new UnsupportedOperationException("Not applicable");		
+		return getCache(cacheName);
 	}
 
 

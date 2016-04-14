@@ -3,25 +3,16 @@
  */
 package com.anz.common.cache.impl;
 
-import java.net.URI;
-
 import javax.cache.Cache;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.anz.common.cache.ICacheDataSource;
-import com.anz.common.cache.data.StaticInMemoryDataSource;
-import com.anz.common.cache.jcache.JCacheCachingProvider;
-import com.google.gson.Gson;
-
 /**
- * @author root
- * @param <K>
+ * Handles global and local cache
+ * Cache Handler Factory -> Cache Handler -> Caching Provider -> Cache Manager -> Cache
+ * 
+ * @author sanketsw
  * 
  */
 public class CacheHandlerFactory {
@@ -30,9 +21,15 @@ public class CacheHandlerFactory {
 
 	private static CacheHandlerFactory _inst = null;
 
+	/**
+	 * private constructor of singleton
+	 */
 	private CacheHandlerFactory() {
 	}
 
+	/**
+	 * @return access to singleton instance
+	 */
 	public static CacheHandlerFactory getInstance() {
 		if (_inst == null) {
 			_inst = new CacheHandlerFactory();
@@ -41,111 +38,61 @@ public class CacheHandlerFactory {
 	}
 
 	/**
-	 * Get from the cache configured here this mehtod is for In memeory Cache
-	 * Manager implemented using JCache
-	 * 
 	 * @param cacheName
 	 * @param objectKey
-	 * @param cachePojoClass
-	 * @param b
-	 * @return
+	 * @return get the object from local or global cache
 	 * @throws Exception
 	 */
-	public <K> K lookupIIBCache(String cacheName, String objectKey,
-			Class<K> cachePojoClass) throws Exception {
+	public String lookupCache(String cacheName, String objectKey)
+			throws Exception {
 
-		String cacheManagerURI = EXtremeScaleCacheManager.URI;
-		ICacheDataSource dataSource = StaticInMemoryDataSource.getInstance();
+		Cache<String, String> localCache = LocalCacheHandler.getInstance()
+				.getCache(cacheName);
+		String cachedObject = localCache != null ? localCache.get(objectKey)
+				: null;
 
-		return lookupCache(cacheName, objectKey, cachePojoClass,
-				cacheManagerURI, dataSource);
+		if (cachedObject != null) {
+			logger.info("found in the local cache: {} objectKey: {}", cacheName, objectKey);
+			return cachedObject;
+		}
+
+		Cache<String, String> globalCache = GlobalCacheHandler.getInstance()
+				.getCache(cacheName);
+		String globalCachedObject = globalCache != null ? globalCache
+				.get(objectKey) : null;
+
+		if (globalCachedObject != null) {
+			logger.info("found in the global cache: {} objectKey: {}", cacheName, objectKey);
+			localCache.put(objectKey, globalCachedObject);
+			return globalCachedObject;
+		}
+		logger.info("Not found in any cache: {} objectKey: {}", cacheName, objectKey);
+		return null;
 	}
 
 	/**
-	 * Get from the cache configured here this mehtod is for In memeory Cache
-	 * Manager implemented using JCache
-	 * 
 	 * @param cacheName
 	 * @param objectKey
-	 * @param cachePojoClass
-	 * @param b
-	 * @return
-	 * @throws Exception
+	 * @param objectValue
+	 * @throws Exception 
 	 */
-	public <K> K lookupInMemoryCache(String cacheName, String objectKey,
-			Class<K> cachePojoClass) throws Exception {
+	public void updateCache(String cacheName, String objectKey, String objectValue) throws Exception {
+		
+		logger.info("updating local and global cache: {} objectKey: {}", cacheName, objectKey);
+		
+		Cache<String, String> localCache = LocalCacheHandler.getInstance()
+				.getCache(cacheName);
+		
+		localCache.remove(objectKey);
+		localCache.put(objectKey, objectValue);
 
-		String cacheManagerURI = InMemoryCacheManager.URI;
-		ICacheDataSource dataSource = StaticInMemoryDataSource.getInstance();
+		
+		Cache<String, String> globalCache = GlobalCacheHandler.getInstance()
+				.getCache(cacheName);
+		
+		globalCache.remove(objectKey);
+		globalCache.put(objectKey, objectValue);
 
-		logger.info("Using cacheManager={} and dataSource={}", cacheManagerURI,
-				dataSource);
-
-		return lookupCache(cacheName, objectKey, cachePojoClass,
-				cacheManagerURI, dataSource);
-	}
-
-	/**
-	 * Generic method to handle cachemanager and datasource
-	 * 
-	 * @param cacheName
-	 * @param objectKey
-	 * @param cachePojoClass
-	 * @param cacheManagerURI
-	 * @param dataSource
-	 * @return
-	 * @throws Exception
-	 */
-	public <K> K lookupCache(String cacheName, String objectKey,
-			Class<K> cachePojoClass, String cacheManagerURI,
-			ICacheDataSource dataSource) throws Exception {
-		String json = null;
-		Cache<String, String> cache = null;
-		try {
-
-			/*if (System.getProperty("javax.cache.spi.CachingProvider") == null) {
-				logger.warn("System property javax.cache.spi.CachingProvider is not set. Setting it to com.anz.common.cache.jcache.JCacheCachingProvider...");
-				System.setProperty("javax.cache.spi.CachingProvider",
-						"com.anz.common.cache.jcache.JCacheCachingProvider");
-			}*/
-
-			CachingProvider provider = Caching.getCachingProvider();
-			if (provider == null) {
-				// If the default caching provider is not set in a system property then use the default one
-				// To change default caching provider, set System property javax.cache.spi.CachingProvider
-				provider = Caching.getCachingProvider(JCacheCachingProvider.class.getName());
-			}
-			if (provider == null) {
-				logger.warn("No CachingProvider has been configured");
-			} else {
-
-				CacheManager cacheManager = provider.getCacheManager(new URI(
-						cacheManagerURI), null);
-				if (cacheManager == null) {
-					logger.warn("CacheManagr {} has not been configured",
-							cacheManagerURI);
-				} else {
-
-					cache = cacheManager.getCache(cacheName);
-					json = cache.get(objectKey);
-					logger.info("Data from Cache= {}", json);
-				}
-			}
-		} catch (Exception e) {
-			logger.catching(Level.WARN, e);
-			// Exception in Cache Manager are not fatal.
-		}
-
-		if (json == null) {
-			json = dataSource.get(objectKey);
-			if (cache != null) {
-				cache.put(objectKey, json);
-			}
-		}
-		K cachePojo = (json != null ? new Gson().fromJson(json, cachePojoClass)
-				: null);
-
-		return cachePojo;
 	}
 
 }

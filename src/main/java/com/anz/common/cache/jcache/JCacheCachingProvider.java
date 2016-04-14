@@ -16,7 +16,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.anz.common.cache.impl.InMemoryCacheManager;
+import com.anz.common.cache.impl.GlobalCacheManager;
+
 
 /**
  * @author sanketsw
@@ -26,7 +27,7 @@ public class JCacheCachingProvider implements CachingProvider  {
 	
 	private static final Logger logger = LogManager.getLogger();
 
-	private static final String URI_DEFAULT = InMemoryCacheManager.URI;
+	private static final String URI_DEFAULT = GlobalCacheManager.URI;
 	
 	private final Map<ClassLoader, ConcurrentMap<URI, JCacheManager>> cacheManagers = new WeakHashMap<ClassLoader, ConcurrentMap<URI, JCacheManager>>();
 

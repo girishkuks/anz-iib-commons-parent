@@ -14,6 +14,8 @@ import com.anz.common.cache.jcache.JCacheManager;
 import com.ibm.broker.plugin.MbException;
 
 /**
+ * In Memory HashMap Cache Manager in JCashe JSR107 standard API
+ * Not integrated with Cache Handler. Just used for unit testing purpose
  * @author sanketsw
  *
  */

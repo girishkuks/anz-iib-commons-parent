@@ -17,12 +17,14 @@ import com.ibm.broker.plugin.MbGlobalMap;
 import com.ibm.broker.plugin.MbGlobalMapSessionPolicy;
 
 /**
- * @author root
- * @param <V>
- * @param <K>
+ * eXtreme Scale MbGlobalMap in JCashe JSR107 standard API
+ * Cache Handler Factory -> Cache Handler -> Caching Provider -> Cache Manager -> Cache
+ * @author sanketsw
+ * @param <V> String
+ * @param <K> String
  *
  */
-public class EXtremeScaleCache<K, V> extends JCache<K, V> {
+public class GlobalCache<K, V> extends JCache<K, V> {
 	
 	private static final Logger logger = LogManager.getLogger();
 		
@@ -30,7 +32,7 @@ public class EXtremeScaleCache<K, V> extends JCache<K, V> {
 	private JConfiguration<K, V> configuration;
 
 
-	public EXtremeScaleCache(String cacheName, CacheManager cacheManager) throws MbException {
+	public GlobalCache(String cacheName, CacheManager cacheManager) throws MbException {
 		super(cacheName, cacheManager);
 		setMap(MbGlobalMap.getGlobalMap(cacheName));
 	}
