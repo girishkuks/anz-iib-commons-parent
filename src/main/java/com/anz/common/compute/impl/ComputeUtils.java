@@ -3,6 +3,7 @@
  */
 package com.anz.common.compute.impl;
 
+import com.ibm.broker.plugin.MbBLOB;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbJSON;
 import com.ibm.broker.plugin.MbMessage;
@@ -35,8 +36,7 @@ public class ComputeUtils {
 		    outMsgRootEl.createElementAsLastChildFromBitstream(outputJson.getBytes("UTF-8"),
 		    		   parserName, messageType, messageSet, messageFormat, encoding, ccsid,
 		    		   options); 
-	    }
-		
+	    }		
 	}
 
 	/**
@@ -53,5 +53,34 @@ public class ComputeUtils {
 	    String inputJson = new String(bs, "UTF-8");
 	    return inputJson;
 	}
+	
+	public static byte[] getBlobData(MbMessage inMessage) throws Exception {
+		MbElement jsonElem = inMessage.getRootElement().getFirstElementByPath("BLOB/BLOB");
+		if(jsonElem == null) return new byte[]{};
+		byte[] bs = jsonElem.toBitstream(null, null, null, 0, 1208, 0);
+		if(bs == null) return new byte[]{};
+		
+	    return bs;		
+	}
 
+	public static void replaceBlobData(MbMessage outMessage, byte[] outputBlob) throws Exception {
+		MbElement outMsgRootEl = outMessage.getRootElement();			    
+	    String parserName = MbBLOB.PARSER_NAME;
+	    String messageType = "";
+	    String messageSet = "";
+	    String messageFormat = "";
+	    int encoding = 0;
+	    int ccsid = 0;
+	    int options = 0; 
+	    
+	    MbElement JSONElement = outMsgRootEl.getFirstElementByPath("BLOB");
+	    
+	    if(JSONElement != null) {
+	    	JSONElement.detach();
+		    outMsgRootEl.createElementAsLastChildFromBitstream(outputBlob,
+		    		   parserName, messageType, messageSet, messageFormat, encoding, ccsid,
+		    		   options); 
+	    }
+		
+	}
 }
