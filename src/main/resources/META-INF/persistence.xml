@@ -12,6 +12,9 @@
 
 		<class>com.anz.common.dataaccess.models.Test</class>
 		<class>com.anz.common.dataaccess.models.iib.Lookup</class>
+		<class>com.anz.common.dataaccess.models.iib.IFXCode</class>
+		<class>com.anz.common.dataaccess.models.iib.IFXProviderCode</class>
+		<class>com.anz.common.dataaccess.models.iib.Provider</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 		<properties>

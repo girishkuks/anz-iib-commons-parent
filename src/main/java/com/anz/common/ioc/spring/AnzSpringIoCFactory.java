@@ -20,7 +20,7 @@ public class AnzSpringIoCFactory implements IIoCFactory {
 		context = new AnnotationConfigApplicationContext();
 		
 		// register the Spring configuration
-		context.register(SpringConfig.class);
+		context.register(TestSpringConfig.class);
 		
 		context.refresh();		
     }
