@@ -88,11 +88,20 @@ public abstract class AbstractCacheHandler {
 		if (cacheManager != null) {
 			try {
 				cache = cacheManager.getCache(getDefaultCacheName());
-			} catch (NoClassDefFoundError e) {
 				// This exception handling for unit test purpose
-				// @see DataSourceSampleTest
+				// @see DataSourceSampleTest			
+			} catch(NoSuchMethodError e) {
+				logger.error("Could not get the global cache");
 				logger.throwing(e);
 				throw new Exception(e);
+			} catch(NoClassDefFoundError e) {
+				logger.error("Could not get the global cache");
+				logger.throwing(e);
+				throw new Exception(e);
+			} catch(Exception e) {
+				logger.error("Could not get the global cache");
+				logger.throwing(e);
+				throw e;
 			}
 			if (cache == null) {
 				logger.warn("Cache {} has not been created",

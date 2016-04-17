@@ -27,7 +27,7 @@ public class DataSourceSampleTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@Before
+	//@Before
 	public void setUp() throws Exception {
 		ds = CachePojoSampleDomain.getInstance();
 		obj = ds.getOperation("SampleKey");
@@ -36,7 +36,7 @@ public class DataSourceSampleTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@After
+	//@After
 	public void tearDown() throws Exception {
 	}
 
@@ -45,7 +45,7 @@ public class DataSourceSampleTest {
 	 * {@link com.anz.common.cache.domain.CachePojoSampleDomain#getObjectFromSource(java.lang.String, java.lang.String, java.lang.Class)}
 	 * .
 	 */
-	@Test
+	//@Test
 	public void testGetObjectFromSource() {
 		assertNotNull(obj);
 		assertEquals("SampleKey", obj.getKey());

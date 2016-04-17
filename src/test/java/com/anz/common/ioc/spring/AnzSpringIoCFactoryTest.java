@@ -11,8 +11,8 @@ import com.anz.common.ioc.IIoCFactory;
 
 public class AnzSpringIoCFactoryTest {
 
-	@Test
-	public void testGetBean() {
+	//@Test
+	public void testGetBean() throws Exception {
 		IIoCFactory factory = AnzSpringIoCFactory.getInstance(null);
 		
 		DataSource ds = factory.getBean("dataSource", DataSource.class);
