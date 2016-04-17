@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author sanketsw
- *
+ * 
  */
 public abstract class AbstractCacheHandler {
 
@@ -26,8 +26,10 @@ public abstract class AbstractCacheHandler {
 	 * @throws URISyntaxException
 	 */
 	public AbstractCacheHandler() throws Exception {
+
 		getCachingProvider();
 		getCacheManager();
+
 	}
 
 	/**
@@ -35,15 +37,17 @@ public abstract class AbstractCacheHandler {
 	 */
 	public CachingProvider getCachingProvider() throws Exception {
 		/*
-		 * if (System.getProperty("javax.cache.spi.CachingProvider") ==
-		 * null) { logger.warn(
+		 * if (System.getProperty("javax.cache.spi.CachingProvider") == null) {
+		 * logger.warn(
 		 * "System property javax.cache.spi.CachingProvider is not set. Setting it to com.anz.common.cache.jcache.JCacheCachingProvider..."
 		 * ); System.setProperty("javax.cache.spi.CachingProvider",
 		 * "com.anz.common.cache.jcache.JCacheCachingProvider"); }
 		 */
 		if (provider == null) {
-			// If the default caching provider is not set in a system  property then use the default one
-			// To change default caching provider, set System property javax.cache.spi.CachingProvider
+			// If the default caching provider is not set in a system property
+			// then use the default one
+			// To change default caching provider, set System property
+			// javax.cache.spi.CachingProvider
 			provider = Caching.getCachingProvider(getCachingProviderName());
 			logger.info("Caching Provider={}", provider);
 		}
@@ -54,19 +58,22 @@ public abstract class AbstractCacheHandler {
 	}
 
 	/**
-	 * Returns the default cache manager
-	 * If you need any other, write your own method in the child class.
-	 * @return JCache CacheManager instance 
+	 * Returns the default cache manager If you need any other, write your own
+	 * method in the child class.
+	 * 
+	 * @return JCache CacheManager instance
 	 * @throws URISyntaxException
 	 */
 	public CacheManager getCacheManager() throws Exception {
 		if (provider != null) {
-			cacheManager =  getCacheManagerURI()!= null? 
-					provider.getCacheManager(new URI(getCacheManagerURI()), null) : 
-						provider.getCacheManager();
-			logger.info("Cache Manager={} loaded from {}", cacheManager, getCacheManagerURI());
+			cacheManager = getCacheManagerURI() != null ? provider
+					.getCacheManager(new URI(getCacheManagerURI()), null)
+					: provider.getCacheManager();
+			logger.info("Cache Manager={} loaded from {}", cacheManager,
+					getCacheManagerURI());
 			if (cacheManager == null) {
-				logger.warn("CacheManagr has not been configured for {}", getCachingProviderName());
+				logger.warn("CacheManagr has not been configured for {}",
+						getCachingProviderName());
 			}
 		}
 		return cacheManager;
@@ -79,12 +86,19 @@ public abstract class AbstractCacheHandler {
 	public Cache<String, String> getCache(String cacheName) throws Exception {
 		Cache<String, String> cache = null;
 		if (cacheManager != null) {
-			cache = cacheManager.getCache(getDefaultCacheName());
-
+			try {
+				cache = cacheManager.getCache(getDefaultCacheName());
+			} catch (NoClassDefFoundError e) {
+				// This exception handling for unit test purpose
+				// @see DataSourceSampleTest
+				logger.throwing(e);
+				throw new Exception(e);
+			}
 			if (cache == null) {
 				logger.warn("Cache {} has not been created",
-						getDefaultCacheName());
+						cacheName);
 			}
+
 		}
 		return cache;
 	}
@@ -95,12 +109,11 @@ public abstract class AbstractCacheHandler {
 	public abstract String getDefaultCacheName();
 
 	/**
-	 * @return get the caching provider name 
-	 * such as cache provider of ehcache or xtremescale cache etc.
+	 * @return get the caching provider name such as cache provider of ehcache
+	 *         or xtremescale cache etc.
 	 */
 	public abstract String getCachingProviderName();
-	
-	
+
 	/**
 	 * @return get cache manager URI
 	 */

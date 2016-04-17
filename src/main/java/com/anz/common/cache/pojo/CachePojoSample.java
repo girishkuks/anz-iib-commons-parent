@@ -24,6 +24,7 @@ public class CachePojoSample extends AbstractCachePojo {
 	
 	String imeplementation;
 	String operation;	
+	String isoCode;
 	
 	/**
 	 * @param key
@@ -62,6 +63,20 @@ public class CachePojoSample extends AbstractCachePojo {
 	 */
 	public void setOperation(String operation) {
 		this.operation = operation;
+	}
+
+	/**
+	 * @return the isoCode
+	 */
+	public String getIsoCode() {
+		return isoCode;
+	}
+
+	/**
+	 * @param isoCode the isoCode to set
+	 */
+	public void setIsoCode(String isoCode) {
+		this.isoCode = isoCode;
 	}
 	
 	

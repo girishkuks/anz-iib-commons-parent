@@ -3,6 +3,8 @@
  */
 package com.anz.common.transform;
 
+import java.math.BigInteger;
+
 import com.google.gson.Gson;
 
 /**
@@ -30,9 +32,16 @@ public class TransformUtils {
 	 * @param pojo
 	 * @return JSON string
 	 */
-	public static String toJSON(ITransformPojo pojo) {
+	public static String toJSON(Object pojo) {
 		String out = new Gson().toJson(pojo);
 		return out;
+	}
+
+	public static String getBlob(String message) {
+		byte[] bytes = message.getBytes(); 
+	    BigInteger bigInt = new BigInteger(bytes);
+	    String hexString = bigInt.toString(16); // 16 is the radix
+	    return hexString;
 	}
 
 }

@@ -3,6 +3,7 @@
  */
 package com.anz.common.compute.impl;
 
+import com.ibm.broker.plugin.MbBLOB;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbJSON;
 import com.ibm.broker.plugin.MbMessage;
@@ -36,6 +37,36 @@ public class ComputeUtils {
 	    		   options); 
 		
 	}
+	
+	/** 
+	 * Converts JSON string to a message tree and assign to outMessage
+	 * @param outMessage outMessage
+	 * @param outputJson JSON string
+	 * @throws Exception
+	 */
+	public static void replaceJsonDataToBlob(MbMessage outMessage, String outputJson) throws Exception {
+		MbElement outMsgRootEl = outMessage.getRootElement();			    
+	    String parserName = MbBLOB.PARSER_NAME;
+	    String messageType = "";
+	    String messageSet = "";
+	    String messageFormat = "";
+	    int encoding = 0;
+	    int ccsid = 0;
+	    int options = 0; 
+	    
+	    MbElement blob = outMsgRootEl.getFirstElementByPath("/BLOB/BLOB");
+	    if(blob != null){
+	    	blob.detach();
+	    }
+	    blob = outMsgRootEl.getFirstElementByPath("BLOB");
+	    if(blob != null){
+	    	blob.detach();
+	    }
+	    outMsgRootEl.createElementAsLastChildFromBitstream(outputJson.getBytes(),
+	    		   parserName, messageType, messageSet, messageFormat, encoding, ccsid,
+	    		   options); 
+		
+	}
 
 	/**
 	 * Get the JSON Data from the message
@@ -49,6 +80,26 @@ public class ComputeUtils {
 		byte[] bs = jsonElem.toBitstream(null, null, null, 0, 1208, 0);
 		if(bs == null) return null;
 	    String inputJson = new String(bs, "UTF-8");
+	    return inputJson;
+	}
+	
+	
+	/**
+	 * Get the JSON Data from the BLOB in the message
+	 * @param inMessage Message
+	 * @return JSON String
+	 * @throws Exception
+	 */
+	public static String getJsonDataFromBlob(MbMessage inMessage) throws Exception {
+		MbElement jsonElem = inMessage.getRootElement().getFirstElementByPath("BLOB/BLOB");
+		if(jsonElem == null) {
+			jsonElem = inMessage.getRootElement ().getFirstElementByPath("BLOB");
+		}
+		if(jsonElem == null) return null;
+		byte[] bs = (byte[]) jsonElem.getValue();
+
+		if(bs == null) return null;
+	    String inputJson = new String(bs);
 	    return inputJson;
 	}
 

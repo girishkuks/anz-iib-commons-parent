@@ -4,6 +4,9 @@
 package com.anz.common.compute.impl;
 
 import com.anz.common.compute.TransformType;
+import com.anz.common.ioc.spring.AnzSpringIoCFactory;
+import com.anz.common.ioc.spring.IIBJdbc4DataSource;
+import com.anz.common.ioc.spring.MbNodefactory;
 import com.anz.common.transform.ITransformer;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
@@ -31,11 +34,20 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 		MbMessage inMessage = inAssembly.getMessage();
 		MbMessage outMessage = outAssembly.getMessage();
 		
-		String inputJson = ComputeUtils.getJsonData(inMessage);
+		/* 
+		 * Set the compute node in the node factory so that 
+		 * Transform classes can use the jdbc type4 connection datasource later
+		 * @see #IIBJdbc4DataSource
+		 * @see #AnzSpringIoCFactory
+		 */
+		MbNodefactory.getInstance().setMbNode(this);
+		
+		
+		String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
 		String outputJson = executeJsonToJsonTranform(inputJson);
 		if (outputJson != null) {
 			// Write this outputJson to outMessage
-			ComputeUtils.replaceJsonData(outMessage, outputJson);
+			ComputeUtils.replaceJsonDataToBlob(outMessage, outputJson);
 		}
 		
 	}

@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.anz</groupId>
 	<artifactId>anz-iib-commons</artifactId>
-	<version>0.0.1</version>
-	<name>anz-iib-commons</name>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
 		<log4j2.version>2.5</log4j2.version>
+		<org.springframework.version>4.1.7.RELEASE</org.springframework.version>
 	</properties>
 
 
@@ -39,6 +39,22 @@
 			<scope>system</scope>
 			<!-- <systemPath>/root/IIB/iib-10.0.0.3/common/classes/IntegrationAPI.jar</systemPath> -->
 			<systemPath>/root/IIB/iib-10.0.0.4/common/classes/IntegrationAPI.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.iib</groupId>
+			<artifactId>bipbroker</artifactId>
+			<version>10.0.0.3</version>
+			<scope>system</scope>
+			<!-- <systemPath>/root/IIB/iib-10.0.0.3/server/classes/bipbroker.jar</systemPath> -->
+			<systemPath>/root/IIB/iib-10.0.0.4/server/classes/bipbroker.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.iib</groupId>
+			<artifactId>jdbcnodes</artifactId>
+			<version>10.0.0.3</version>
+			<scope>system</scope>
+			<!-- <systemPath>/root/IIB/iib-10.0.0.3/server/classes/jdbcnodes.jar</systemPath> -->
+			<systemPath>/root/IIB/iib-10.0.0.4/server/classes/jdbcnodes.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.ibm.etools.mft</groupId>
@@ -80,7 +96,37 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.21</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.10.1.RELEASE</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.jpa</artifactId>
+			<version>2.5.0</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0.1</version>
+		</dependency>
 
 	</dependencies>
 	<!-- <build> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
