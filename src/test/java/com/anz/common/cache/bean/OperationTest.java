@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.anz.common.cache.pojo.CachePojoSample;
+import com.anz.common.dataaccess.models.iib.Operation;
 
 
 
@@ -18,10 +18,10 @@ import com.anz.common.cache.pojo.CachePojoSample;
  * @author root
  *
  */
-public class CachePojoSampleTest {
+public class OperationTest {
 	
-	private CachePojoSample op;
-	private CachePojoSample opForSetters;
+	private Operation op;
+	private Operation opForSetters;
 	private String implementation = "IIB";
 	
 
@@ -30,8 +30,13 @@ public class CachePojoSampleTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		op = new CachePojoSample(CachePojoSample.ADD, implementation);
-		opForSetters = new CachePojoSample(CachePojoSample.ADD, implementation);
+		op = new Operation();	
+		op.setOperation(Operation.ADD);
+		op.setImeplementation(implementation);
+		
+		opForSetters = new Operation();	
+		op.setOperation(Operation.ADD);
+		op.setImeplementation(implementation);
 	}
 
 	/**
@@ -42,7 +47,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#OperationDetails(java.lang.String, java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.pojo.Operation#OperationDetails(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testOperationDetails() {
@@ -50,7 +55,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#getImeplementation()}.
+	 * Test method for {@link com.anz.common.cache.pojo.Operation#getImeplementation()}.
 	 */
 	@Test
 	public void testGetImeplementation() {
@@ -58,7 +63,7 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#setImeplementation(java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.pojo.Operation#setImeplementation(java.lang.String)}.
 	 */
 	@Test
 	public void testSetImeplementation() {
@@ -67,15 +72,15 @@ public class CachePojoSampleTest {
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#getOperation()}.
+	 * Test method for {@link com.anz.common.cache.pojo.Operation#getOperation()}.
 	 */
 	@Test
 	public void testGetOperation() {
-		assertEquals(CachePojoSample.ADD, op.getOperation());
+		assertEquals(Operation.ADD, op.getOperation());
 	}
 
 	/**
-	 * Test method for {@link com.anz.common.cache.pojo.CachePojoSample#setOperation(java.lang.String)}.
+	 * Test method for {@link com.anz.common.cache.pojo.Operation#setOperation(java.lang.String)}.
 	 */
 	@Test
 	public void testSetOperation() {

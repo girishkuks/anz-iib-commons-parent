@@ -6,8 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.anz.common.dataaccess.ICommonEntity;
+
 @Entity
-public class IFXCode {
+public class IFXCode implements ICommonEntity {
 
 	@Id
 	private String code;
@@ -59,5 +61,12 @@ public class IFXCode {
 	
 	public void setIfxProviderCodes(List<IFXProviderCode> ifxProviderCodes) {
 		this.ifxProviderCodes = ifxProviderCodes;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.anz.common.dataaccess.ICommonEntity#getKey()
+	 */
+	public String getKey() {
+		return code;
 	}
 }

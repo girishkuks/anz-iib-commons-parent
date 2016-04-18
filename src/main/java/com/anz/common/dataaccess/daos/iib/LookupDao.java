@@ -6,5 +6,7 @@ import com.anz.common.dataaccess.daos.iib.repos.LookupRepository;
 import com.anz.common.dataaccess.models.iib.Lookup;
 
 public class LookupDao extends AbstractDao<Lookup, String, LookupRepository> implements ILookupDao {
+
+
 	
 }

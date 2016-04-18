@@ -3,17 +3,13 @@
  */
 package com.anz.common.cache.impl;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.cache.Cache;
 import javax.cache.configuration.MutableConfiguration;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.anz.common.cache.pojo.CachePojoSample;
 
 /**
  * ehCache Cache Handler in JCashe JSR107 standard API
@@ -40,12 +36,6 @@ public class LocalCacheHandler extends AbstractCacheHandler {
 			
 		}
 		return _inst;
-	}
-
-
-	public void cacheObject(CachePojoSample operation) {
-		// TODO Auto-generated method stub
-
 	}
 
 

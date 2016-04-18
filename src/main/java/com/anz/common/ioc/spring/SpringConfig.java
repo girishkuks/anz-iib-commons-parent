@@ -5,11 +5,11 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import com.anz.common.dataaccess.daos.ILookupDao;
+import com.anz.common.dataaccess.daos.IOperationDao;
 import com.anz.common.dataaccess.daos.iib.LookupDao;
+import com.anz.common.dataaccess.daos.iib.OperationDao;
 
 @Configuration
 @EnableJpaRepositories(basePackages={"com.anz.common.dataaccess.daos.iib.repos"})
@@ -26,5 +26,10 @@ public class SpringConfig extends AbstractSpringConfig {
 	@Bean
 	public ILookupDao lookupDao() {
 		return new LookupDao();
+	}
+	
+	@Bean
+	public IOperationDao operationDao() {
+		return new OperationDao();
 	}
 }

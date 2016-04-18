@@ -3,8 +3,10 @@ package com.anz.common.dataaccess.models.iib;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.anz.common.dataaccess.ICommonEntity;
+
 @Entity
-public class Lookup {
+public class Lookup implements ICommonEntity {
 
 	@Id
 	private String qualifier;
@@ -35,5 +37,12 @@ public class Lookup {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.anz.common.dataaccess.ICommonEntity#getKey()
+	 */
+	public String getKey() {
+		return qualifier;
 	}
 }

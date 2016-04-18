@@ -1,14 +1,13 @@
 /**
  * 
  */
-package com.anz.common.cache.domain;
+package com.anz.common.domain;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.anz.common.cache.ICacheDomainObject;
 import com.anz.common.cache.impl.CacheHandlerFactory;
-import com.anz.common.cache.pojo.CachePojoSample;
 import com.anz.common.dataaccess.daos.ILookupDao;
 import com.anz.common.dataaccess.models.iib.Lookup;
 import com.anz.common.ioc.IIoCFactory;
@@ -25,67 +24,77 @@ import com.anz.common.transform.TransformUtils;
  * @author sanketsw
  * 
  */
-public class CachePojoSampleDomain implements ICacheDomainObject {
+public class LookupDomain implements ICacheDomainObject {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private static CachePojoSampleDomain _inst = null;
+	private static LookupDomain _inst = null;
 
 	private CacheHandlerFactory cacheHandler = CacheHandlerFactory
 			.getInstance();
 
-	private CachePojoSampleDomain() {
+	private LookupDomain() {
 	}
 
-	public static CachePojoSampleDomain getInstance() {
+	public static LookupDomain getInstance() {
 		if (_inst == null) {
-			_inst = new CachePojoSampleDomain();
+			_inst = new LookupDomain();
 		}
 		return _inst;
 	}
 
 	/**
-	 * Get the operation details from the cache or static database
+	 * Get the lookup details from the cache or static database
 	 * 
 	 * @param key
 	 * @return
 	 */
-	public CachePojoSample getOperation(String key) {
+	public Lookup getLookup(String key) {
 
 		String json = null;
-		CachePojoSample operation = null;
+		Lookup lookup = null;
 
 		json = cacheHandler.lookupCache(getDefaultCacheName(), key);
 
 		if (json != null) {
-			operation = TransformUtils.fromJSON(json, CachePojoSample.class);
-		} else {
-			operation = new CachePojoSample(key, "IIB REST API implementation");			
+			lookup = TransformUtils.fromJSON(json, Lookup.class);
+		} else {	
 
 			// Read from JPA/Database and map to cacheable pojo
 			IIoCFactory factory;
 			try {
 				factory = AnzSpringIoCFactory.getInstance();
-				ILookupDao lookupDao = factory.getBean(ILookupDao.class);
-				logger.info("lookupDao {}", lookupDao);
-				Lookup l1 = lookupDao.findOne("Australia");
-				logger.info("got value from lookupDao {}", l1.getValue());
-				operation.setIsoCode("Country=" + l1.getName() + " ISO Code=" + l1.getValue());
+				ILookupDao dao = factory.getBean(ILookupDao.class);
+				logger.info("operationDao: {}", dao);
+				lookup = dao.findOne(key);
+				if(lookup == null) {
+					// Create a new one 
+					// database is empty
+					Lookup operation2 = new Lookup();
+					operation2.setQualifier(key);
+					operation2.setName(key);
+					operation2.setValue("+61");
+					lookup = dao.saveAndFlush(operation2);
+					logger.info("created new operation: {}", lookup.getValue());
+				}
+				logger.info("got value in operationDao from data source: {}", lookup.getValue());
+				
 			} catch (Exception e) {
 				logger.error("Could not read from daat source");
 				logger.throwing(e);
 			}
 
 			cacheHandler.updateCache(getDefaultCacheName(), key,
-					operation.toJSON());
+					TransformUtils.toJSON(lookup));
 
 		}
 
-		return operation;
+		return lookup;
 	}
 
 	public String getDefaultCacheName() {
-		return "SamplePojoCache";
+		return "LookupCache";
 	}
 
+	
 }
