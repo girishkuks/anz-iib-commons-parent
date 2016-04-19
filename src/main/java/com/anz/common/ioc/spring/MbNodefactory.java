@@ -10,20 +10,21 @@ import com.ibm.broker.plugin.MbNode;
 
 /**
  * @author sanketsw
- *
+ * 
  */
 public class MbNodefactory {
-	
+
 	private static final Logger logger = LogManager.getLogger();
-	
+
 	private MbNode mbNode;
-	
+
 	private static MbNodefactory _inst = null;
-	
-	private MbNodefactory() {}
-	
+
+	private MbNodefactory() {
+	}
+
 	public static MbNodefactory getInstance() {
-		if(_inst == null) {
+		if (_inst == null) {
 			_inst = new MbNodefactory();
 		}
 		return _inst;
@@ -38,16 +39,13 @@ public class MbNodefactory {
 	}
 
 	/**
-	 * @param mbNode the mbNode to set
+	 * @param mbNode  the mbNode to set
 	 */
 	public void setMbNode(MbNode mbNode) {
-		logger.debug("Set mbnode={}", mbNode!= null? mbNode.getName(): null);
-		this.mbNode = mbNode;
+		if (this.mbNode == null && mbNode != null) {
+			logger.debug("Set mbnode={}", mbNode != null ? mbNode.getName() : null);
+			this.mbNode = mbNode;
+		}
 	}
-
-	
-
-	
-
 
 }

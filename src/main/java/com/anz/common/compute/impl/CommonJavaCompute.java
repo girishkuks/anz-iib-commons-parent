@@ -73,14 +73,5 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 			MbMessageAssembly outAssembly) throws Exception;
 
 
-	/**
-	 * Determine the global cache map name
-	 * 
-	 * @return cache map name
-	 */
-	public String getCacheMapName() {
-		return "DefaultMap";
-	}
-
 
 }

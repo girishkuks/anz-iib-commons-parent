@@ -16,10 +16,9 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  * @author sanketsw
  *
  */
-public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
+public class CommonAssemblyTransformCompute extends CommonJavaCompute {
 	
 	private static final Logger logger = LogManager.getLogger();
-
 
 	/* (non-Javadoc)
 	 * @see com.anz.common.compute.ICommonComputeNode#getTransformationType()
@@ -35,7 +34,7 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	public void execute(MbMessageAssembly inAssembly,
 			MbMessageAssembly outAssembly) throws Exception {
 		
-		MbMessage inMessage = inAssembly.getMessage();
+		//MbMessage inMessage = inAssembly.getMessage();
 		MbMessage outMessage = outAssembly.getMessage();
 		
 		/* 
@@ -47,8 +46,8 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 		MbNodefactory.getInstance().setMbNode(this);
 		
 		
-		String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
-		String outputJson = executeJsonToJsonTranform(inputJson);
+		//String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
+		String outputJson = executeJsonToJsonTranform(inAssembly);
 		if (outputJson != null) {
 			// Write this outputJson to outMessage
 			ComputeUtils.replaceJsonDataToBlob(outMessage, outputJson);
@@ -60,18 +59,19 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	 * Write business logic here if you merely need to transform the message
 	 * from JSON to JSON
 	 * 
-	 * @param inputJson
-	 *            input JSON Data
+	 * @param inAssembly
+	 *            input assembly
 	 * @return output JSON Data to be placed in the message
 	 */
 	@SuppressWarnings("unchecked")
-	public String executeJsonToJsonTranform(String inputJson) throws Exception {
+	public String executeJsonToJsonTranform(MbMessageAssembly inAssembly) throws Exception {
 		String outJson = null;
+		// Remove the subflow name if any from the Transformer class before com.anz.**
 		String transformerClassName = getName().substring(getName().indexOf("com"));
 		logger.info("Creating instance of {}", transformerClassName);
 		try {
-			ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(transformerClassName).newInstance();
-			outJson = jsonTransformer.execute(inputJson);
+			ITransformer<MbMessageAssembly, String> jsonTransformer = (ITransformer<MbMessageAssembly, String>)Class.forName(transformerClassName).newInstance();
+			outJson = jsonTransformer.execute(inAssembly);
 		} catch(Exception e) {
 			logger.throwing(e);
 			throw e;

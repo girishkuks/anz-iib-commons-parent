@@ -10,6 +10,14 @@ import com.anz.common.dataaccess.ICommonEntity;
 
 @Entity
 public class IFXCode implements ICommonEntity {
+	
+	public static final String SEV_CRITICAL = "Critical";
+	public static final String SEV_NORMAL = "Normal";
+	public static final String SEV_MINOR = "Minor";
+	
+	public static final String STATUS_FAILURE = "Failure";
+	public static final String STATUS_WARNING = "Warning";
+	public static final String STATUS_IGNORE = "Ignore";
 
 	@Id
 	private String code;
