@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import com.anz.common.compute.TransformType;
 import com.anz.common.ioc.spring.MbNodefactory;
 import com.anz.common.transform.ITransformer;
+import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
 
@@ -16,7 +17,7 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  * @author sanketsw
  *
  */
-public class CommonAssemblyTransformCompute extends CommonJavaCompute {
+public class ErrrorTransformCompute extends CommonJavaCompute {
 	
 	private static final Logger logger = LogManager.getLogger();
 
@@ -34,7 +35,7 @@ public class CommonAssemblyTransformCompute extends CommonJavaCompute {
 	public void execute(MbMessageAssembly inAssembly,
 			MbMessageAssembly outAssembly) throws Exception {
 		
-		//MbMessage inMessage = inAssembly.getMessage();
+		MbMessage inMessage = inAssembly.getMessage();
 		MbMessage outMessage = outAssembly.getMessage();
 		
 		/* 
@@ -46,9 +47,27 @@ public class CommonAssemblyTransformCompute extends CommonJavaCompute {
 		MbNodefactory.getInstance().setMbNode(this);
 		
 		
+		// Create an HTTPResponseHeader with Error value to return for the failure if it is missing
+		MbElement outRoot = outMessage.getRootElement();
+		if(outRoot.getFirstElementByPath("HTTPResponseHeader") == null)
+		{
+			MbElement msgProps = inMessage.getRootElement().getFirstElementByPath("/Properties").copy();
+			outRoot.addAsFirstChild(msgProps); 
+			MbElement httpResHdr = outRoot.createElementAsLastChild(MbElement.TYPE_NAME, "HTTPResponseHeader", null); 
+	        httpResHdr.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "X-Original-HTTP-Status-Line", "HTTP/1.1 500"); 
+	        httpResHdr.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "X-Original-HTTP-Status-Code", 500); 
+	        httpResHdr.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "Content-Type", "text/html; charset=utf-8"); 
+		}
+		
+		
 		//String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
 		String outputJson = executeJsonToJsonTranform(inAssembly);
 		if (outputJson != null) {
+			// Detach Original Exception Node from the response
+			MbElement exception = outAssembly.getExceptionList().getRootElement();
+			exception.detach();
+
+			
 			// Write this outputJson to outMessage
 			ComputeUtils.replaceJsonDataToBlob(outMessage, outputJson);
 		}
