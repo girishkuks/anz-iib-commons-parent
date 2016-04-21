@@ -39,12 +39,12 @@ public class ComputeUtils {
 	}
 	
 	/** 
-	 * Converts JSON string to a message tree and assign to outMessage
+	 * Converts a string to a message tree and assign to outMessage
 	 * @param outMessage outMessage
-	 * @param outputJson JSON string
+	 * @param outputJson a string
 	 * @throws Exception
 	 */
-	public static void replaceJsonDataToBlob(MbMessage outMessage, String outputJson) throws Exception {
+	public static void replaceStringAsBlob(MbMessage outMessage, String outputJson) throws Exception {
 		MbElement outMsgRootEl = outMessage.getRootElement();			    
 	    String parserName = MbBLOB.PARSER_NAME;
 	    String messageType = "";
@@ -85,22 +85,22 @@ public class ComputeUtils {
 	
 	
 	/**
-	 * Get the JSON Data from the BLOB in the message
+	 * Get the String from the BLOB in the message
 	 * @param inMessage Message
-	 * @return JSON String
+	 * @return String
 	 * @throws Exception
 	 */
-	public static String getJsonDataFromBlob(MbMessage inMessage) throws Exception {
-		MbElement jsonElem = inMessage.getRootElement().getFirstElementByPath("BLOB/BLOB");
-		if(jsonElem == null) {
-			jsonElem = inMessage.getRootElement ().getFirstElementByPath("BLOB");
+	public static String getStringFromBlob(MbMessage inMessage) throws Exception {
+		MbElement blobElem = inMessage.getRootElement().getFirstElementByPath("BLOB/BLOB");
+		if(blobElem == null) {
+			blobElem = inMessage.getRootElement ().getFirstElementByPath("BLOB");
 		}
-		if(jsonElem == null) return null;
-		byte[] bs = (byte[]) jsonElem.getValue();
+		if(blobElem == null) return null;
+		byte[] bs = (byte[]) blobElem.getValue();
 
 		if(bs == null) return null;
-	    String inputJson = new String(bs);
-	    return inputJson;
+	    String inputStr = new String(bs);
+	    return inputStr;
 	}
 
 }

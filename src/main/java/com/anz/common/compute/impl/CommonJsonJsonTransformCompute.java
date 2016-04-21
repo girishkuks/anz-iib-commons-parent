@@ -16,7 +16,7 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  * @author sanketsw
  *
  */
-public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
+public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	
 	private static final Logger logger = LogManager.getLogger();
 
@@ -47,11 +47,11 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 		MbNodefactory.getInstance().setMbNode(this);
 		
 		
-		String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
+		String inputJson = ComputeUtils.getStringFromBlob(inMessage);
 		String outputJson = executeJsonToJsonTranform(inputJson);
 		if (outputJson != null) {
 			// Write this outputJson to outMessage
-			ComputeUtils.replaceJsonDataToBlob(outMessage, outputJson);
+			ComputeUtils.replaceStringAsBlob(outMessage, outputJson);
 		}
 		
 	}
@@ -67,10 +67,11 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	@SuppressWarnings("unchecked")
 	public String executeJsonToJsonTranform(String inputJson) throws Exception {
 		String outJson = null;
-		String transformerClassName = getName().substring(getName().indexOf("com"));
-		logger.info("Creating instance of {}", transformerClassName);
+		//String transformerClassName = getName().substring(getName().indexOf("com"));
+		//logger.info("Creating instance of {}", transformerClassName);
 		try {
-			ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(transformerClassName).newInstance();
+			//ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(transformerClassName).newInstance();
+			ITransformer<String, String> jsonTransformer = getTransformer();
 			outJson = jsonTransformer.execute(inputJson);
 		} catch(Exception e) {
 			logger.throwing(e);
@@ -78,6 +79,12 @@ public class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 		}
 		return outJson;
 	}
+	
+	/**
+	 * Get the external transformer class instance
+	 * @return
+	 */
+	public abstract ITransformer<String, String> getTransformer();
 
 	
 
