@@ -12,8 +12,7 @@ import com.ibm.broker.plugin.MbMessage;
  * @author sanketsw
  *
  */
-public class ComputeUtils {
-	
+public class ComputeUtils {	
 
 	
 	/** 

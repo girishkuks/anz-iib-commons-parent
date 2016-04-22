@@ -3,7 +3,12 @@
  */
 package com.anz.common.compute.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.anz.common.compute.ComputeInfo;
 import com.anz.common.compute.ICommonJavaCompute;
+import com.anz.common.compute.TransformType;
 import com.ibm.broker.javacompute.MbJavaComputeNode;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
@@ -17,6 +22,79 @@ import com.ibm.broker.plugin.MbUserException;
  */
 public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 		ICommonJavaCompute {
+	
+	
+	static Logger logger = LogManager.getLogger();
+	
+	ComputeInfo metaData;
+	
+
+	/**
+	 * @return the metaData
+	 */
+	public ComputeInfo getMetaData() {
+		return metaData;
+	}
+
+
+
+	/**
+	 * @param metaData the metaData to set
+	 */
+	public void setMetaData(ComputeInfo metaData) {
+		this.metaData = metaData;
+	}
+
+
+
+	public Logger getLogger() {
+		return logger;
+	}
+	
+	
+
+	/* (non-Javadoc)
+	 * @see com.anz.common.compute.ICommonJavaCompute#getTransformationType()
+	 */
+	public TransformType getTransformationType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see com.ibm.broker.javacompute.MbJavaComputeNode#onInitialize()
+	 */
+	@Override
+	public void onInitialize() throws MbException {
+		// TODO Auto-generated method stub
+		super.onInitialize();
+		
+		String logger_name = (String) getUserDefinedAttribute("LOGGER_NAME");
+		if(logger_name!= null) {
+			logger =  LogManager.getLogger(logger_name);
+		}
+		
+		constructComputeInfo();
+	}
+
+
+
+	private void constructComputeInfo() {
+		metaData = new ComputeInfo();
+		try {
+			metaData.setApplication(getMessageFlow().getApplicationName());
+			metaData.setMessageFlow(getMessageFlow().getName());
+			metaData.setBroker(getBroker().getName());
+			metaData.setComputeName(getName());
+		} catch (MbException e) {
+			logger.error("Error accessing message flow and broker details from Compute {}", getName());
+			logger.throwing(e);
+		}
+	}
+
+
 
 	/*
 	 * (non-Javadoc)

@@ -17,9 +17,6 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  *
  */
 public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
-	
-	private static final Logger logger = LogManager.getLogger();
-
 
 	/* (non-Javadoc)
 	 * @see com.anz.common.compute.ICommonComputeNode#getTransformationType()
@@ -72,7 +69,7 @@ public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 		try {
 			//ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(transformerClassName).newInstance();
 			ITransformer<String, String> jsonTransformer = getTransformer();
-			outJson = jsonTransformer.execute(inputJson);
+			outJson = jsonTransformer.execute(inputJson, logger, metaData);
 		} catch(Exception e) {
 			logger.throwing(e);
 			throw e;

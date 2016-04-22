@@ -18,8 +18,6 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  *
  */
 public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
-	
-	private static final Logger logger = LogManager.getLogger();
 
 	/* (non-Javadoc)
 	 * @see com.anz.common.compute.ICommonComputeNode#getTransformationType()
@@ -47,9 +45,13 @@ public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
 		MbNodefactory.getInstance().setMbNode(this);
 		
 		
+		boolean fireAndForget = false;
+		// TODO Get the FireAndForget user defined property
+		
+		
 		// Create an HTTPResponseHeader with Error value to return for the failure if it is missing
 		MbElement outRoot = outMessage.getRootElement();
-		if(outRoot.getFirstElementByPath("HTTPResponseHeader") == null)
+		if(!fireAndForget && outRoot.getFirstElementByPath("HTTPResponseHeader") == null)
 		{
 			MbElement msgProps = inMessage.getRootElement().getFirstElementByPath("/Properties").copy();
 			outRoot.addAsFirstChild(msgProps); 
@@ -57,7 +59,7 @@ public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
 	        httpResHdr.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "X-Original-HTTP-Status-Line", "HTTP/1.1 500"); 
 	        httpResHdr.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "X-Original-HTTP-Status-Code", 500); 
 	        httpResHdr.createElementAsLastChild(MbElement.TYPE_NAME_VALUE, "Content-Type", "text/html; charset=utf-8"); 
-		}
+		}	
 		
 		
 		//String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
@@ -89,7 +91,7 @@ public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
 		try {
 			//ITransformer<MbMessageAssembly, String> jsonTransformer = (ITransformer<MbMessageAssembly, String>)Class.forName(transformerClassName).newInstance();
 			ITransformer<MbMessageAssembly, String> transformer = getTransformer();
-			outputString = transformer.execute(outAssembly);
+			outputString = transformer.execute(outAssembly, logger, metaData);
 		} catch(Exception e) {
 			logger.throwing(e);
 			throw e;
