@@ -44,7 +44,8 @@ public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
 		if (outputJson != null) {
 			// Detach Original Exception Node from the response
 			MbElement exception = outAssembly.getExceptionList().getRootElement().getFirstChild();
-			exception.detach();
+			if(exception != null)
+				exception.detach();
 			
 			// Write this outputJson to outMessage
 			ComputeUtils.replaceStringAsBlob(outMessage, outputJson);
