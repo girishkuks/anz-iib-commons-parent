@@ -9,5 +9,5 @@ import com.anz.common.compute.ComputeInfo;
 
 
 public interface ITransformer<I,O> {
-	O execute(I input, Logger logger, ComputeInfo metadata) throws Exception;
+	O execute(I input, Logger appLogger, ComputeInfo metadata) throws Exception;
 }

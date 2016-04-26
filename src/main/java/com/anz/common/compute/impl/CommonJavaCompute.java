@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.anz.common.compute.ComputeInfo;
 import com.anz.common.compute.ICommonJavaCompute;
-import com.anz.common.compute.TransformType;
 import com.ibm.broker.javacompute.MbJavaComputeNode;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
@@ -25,6 +24,7 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	
 	
 	static Logger logger = LogManager.getLogger();
+	static Logger appLogger = LogManager.getLogger();
 	
 	ComputeInfo metaData;
 	
@@ -54,26 +54,17 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	
 
 	/* (non-Javadoc)
-	 * @see com.anz.common.compute.ICommonJavaCompute#getTransformationType()
-	 */
-	public TransformType getTransformationType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	/* (non-Javadoc)
 	 * @see com.ibm.broker.javacompute.MbJavaComputeNode#onInitialize()
 	 */
 	@Override
 	public void onInitialize() throws MbException {
 		// TODO Auto-generated method stub
-		super.onInitialize();
+		super.onInitialize();	
 		
-		String logger_name = (String) getUserDefinedAttribute("LOGGER_NAME");
-		if(logger_name!= null) {
-			logger =  LogManager.getLogger(logger_name);
+		String appLoggerName = (String) getUserDefinedAttribute("LOGGER_NAME");
+		if(appLoggerName != null && ! appLoggerName.isEmpty()) {
+			appLogger = LogManager.getLogger(appLoggerName);
+			logger.info("appLogger is set to {}", appLoggerName);
 		}
 		
 		constructComputeInfo();
@@ -84,10 +75,10 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	private void constructComputeInfo() {
 		metaData = new ComputeInfo();
 		try {
-			metaData.setApplication(getMessageFlow().getApplicationName());
-			metaData.setMessageFlow(getMessageFlow().getName());
-			metaData.setBroker(getBroker().getName());
+			metaData.setMessageFlow(getMessageFlow());
+			metaData.setBroker(getBroker());
 			metaData.setComputeName(getName());
+			logger.info("Metadata {}", getName());
 		} catch (MbException e) {
 			logger.error("Error accessing message flow and broker details from Compute {}", getName());
 			logger.throwing(e);
@@ -115,8 +106,9 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 			outAssembly = new MbMessageAssembly(inAssembly, outMessage);
 			// ----------------------------------------------------------
 			// Add user code below
-
+			
 			execute(inAssembly, outAssembly);
+			
 
 			// End of user code
 			// ----------------------------------------------------------
@@ -138,6 +130,9 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 		out.propagate(outAssembly);
 
 	}
+
+
+
 
 	/**
 	 * Override business logic here if you need to use local environment or http

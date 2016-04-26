@@ -13,8 +13,11 @@
     <Root level="error">
       	<AppenderRef ref="Async"/>
     </Root>
-   <logger name="default" level="info" additivity="false">
-  		<AppenderRef ref="Async"/>
+   <logger name="com.anz.common" level="info" additivity="false">
+      <AppenderRef ref="Async"/>
+   </logger>
+   <logger name="com.anz.HttpJsonToHttpJson" level="info" additivity="false">
+      <AppenderRef ref="Async"/>
    </logger>
   </Loggers>
 </Configuration>

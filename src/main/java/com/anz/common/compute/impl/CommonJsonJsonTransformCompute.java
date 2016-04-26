@@ -22,7 +22,7 @@ public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	 * @see com.anz.common.compute.ICommonComputeNode#getTransformationType()
 	 */
 	public TransformType getTransformationType() {
-		return TransformType.JSON_TO_JSON;
+		return TransformType.HTTP_HHTP;
 	}
 	
 	/* (non-Javadoc)
@@ -69,7 +69,7 @@ public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 		try {
 			//ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(transformerClassName).newInstance();
 			ITransformer<String, String> jsonTransformer = getTransformer();
-			outJson = jsonTransformer.execute(inputJson, logger, metaData);
+			outJson = jsonTransformer.execute(inputJson, appLogger, metaData);
 		} catch(Exception e) {
 			logger.throwing(e);
 			throw e;
@@ -84,5 +84,11 @@ public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	public abstract ITransformer<String, String> getTransformer();
 
 	
+	/**
+	 * Save any user provided properties to local environment for this instance of message flow execution
+	 * Such as Incident Area
+	 * @param outAssembly
+	 */
+	public abstract void saveUserProvidedProperties(MbMessageAssembly outAssembly);
 
 }

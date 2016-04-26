@@ -3,21 +3,48 @@
  */
 package com.anz.common.compute;
 
+import com.ibm.broker.plugin.MbBroker;
+import com.ibm.broker.plugin.MbMessageFlow;
+
 /**
  * @author root
  *
  */
 public class ComputeInfo {
 	
-	String messageFlow;
+	MbMessageFlow messageFlow;
 	
-	String application;
-	
-	String broker;
+	MbBroker broker;
 	
 	String computeName;
-	
-	
+
+	/**
+	 * @return the messageFlow
+	 */
+	public MbMessageFlow getMessageFlow() {
+		return messageFlow;
+	}
+
+	/**
+	 * @param messageFlow the messageFlow to set
+	 */
+	public void setMessageFlow(MbMessageFlow messageFlow) {
+		this.messageFlow = messageFlow;
+	}
+
+	/**
+	 * @return the broker
+	 */
+	public MbBroker getBroker() {
+		return broker;
+	}
+
+	/**
+	 * @param broker the broker to set
+	 */
+	public void setBroker(MbBroker broker) {
+		this.broker = broker;
+	}
 
 	/**
 	 * @return the computeName
@@ -32,50 +59,7 @@ public class ComputeInfo {
 	public void setComputeName(String computeName) {
 		this.computeName = computeName;
 	}
-
-	/**
-	 * @return the messageFlow
-	 */
-	public String getMessageFlow() {
-		return messageFlow;
-	}
-
-	/**
-	 * @param messageFlow the messageFlow to set
-	 */
-	public void setMessageFlow(String messageFlow) {
-		this.messageFlow = messageFlow;
-	}
-
-	/**
-	 * @return the application
-	 */
-	public String getApplication() {
-		return application;
-	}
-
-	/**
-	 * @param application the application to set
-	 */
-	public void setApplication(String application) {
-		this.application = application;
-	}
-
-	/**
-	 * @return the broker
-	 */
-	public String getBroker() {
-		return broker;
-	}
-
-	/**
-	 * @param broker the broker to set
-	 */
-	public void setBroker(String broker) {
-		this.broker = broker;
-	}
 	
-	
-	
+			
 
 }

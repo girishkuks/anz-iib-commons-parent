@@ -16,6 +16,7 @@
 		<class>com.anz.common.dataaccess.models.iib.IFXCode</class>
 		<class>com.anz.common.dataaccess.models.iib.IFXProviderCode</class>
 		<class>com.anz.common.dataaccess.models.iib.Provider</class>
+		<class>com.anz.common.dataaccess.models.iib.ErrorStatusCode</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 		<properties>

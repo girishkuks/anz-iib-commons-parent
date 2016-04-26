@@ -9,9 +9,9 @@ package com.anz.common.compute;
  */
 public enum TransformType {
 
-	JSON_TO_JSON, 
-	JSON_TO_XML, 
-	XML_TO_JSON,
+	HTTP_HHTP, 
+	MQ_MQ,
+	HTTP_MQ,
 	UNSPECIFIED
 
 }
