@@ -14,7 +14,7 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  * @author sanketsw
  *
  */
-public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
+public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 
 	
 	/* (non-Javadoc)
@@ -35,11 +35,20 @@ public abstract class CommonErrrorTransformCompute extends CommonJavaCompute {
 		 */
 		MbNodefactory.getInstance().setMbNode(this);
 		
-		MbElement replyStatusCode = ComputeUtils.setHttpReplyStatus(outAssembly, "500");
-		logger.info("Setting http reply status code: ", replyStatusCode);
+		
+		/*
+		 * Set the HTTPResponseHeader to Http 1.0/500 Internal Server Error
+		 * Only for HTTP flows and when the error is not already set something else
+		 * This block will be executed for internal errors in transformation such as NullPointerExceptions etc. 
+		 */
+		TransformType transformType = getTransformationType();
+		if((transformType.equals(TransformType.HTTP_HHTP) || transformType.equals(TransformType.HTTP_MQ))
+				&& outMessage.getRootElement().getFirstElementByPath("HTTPResponseHeader") == null) {
+			MbElement replyStatusCode = ComputeUtils.setHttpReplyStatus(outAssembly, "500");
+			logger.info("Setting http reply status code: ", replyStatusCode);
+		}
 		
 		
-		//String inputJson = ComputeUtils.getJsonDataFromBlob(inMessage);
 		String outputJson = executeTranformation(outAssembly);
 		if (outputJson != null) {
 			// Detach Original Exception Node from the response

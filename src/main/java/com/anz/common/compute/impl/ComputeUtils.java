@@ -121,6 +121,12 @@ public class ComputeUtils {
 		return inputStr;
 	}
 
+	/**
+	 * Get the short exception text from the Exceptions Tree of the message
+	 * @param outAssembly
+	 * @return short exception text string delimited by :
+	 * @throws MbException
+	 */
 	public static String getExceptionText(MbMessageAssembly outAssembly)
 			throws MbException {
 		// This is internal failure in transformation or logic
@@ -149,6 +155,13 @@ public class ComputeUtils {
 		return exceptionText;
 	}
 
+	/**
+	 * Set the reply status of the http response header.
+	 * @param outAssembly
+	 * @param statusCode e.g. 500
+	 * @return the replystatuscode element Destination/HTTP/ReplyStatusCode
+	 * @throws MbException
+	 */
 	public static MbElement setHttpReplyStatus(MbMessageAssembly outAssembly, String statusCode) throws MbException {
 		// Create an HTTPResponseHeader with Error value to return for the
 		// failure if it is missing
