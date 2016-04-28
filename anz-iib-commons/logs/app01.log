@@ -1,0 +1,2 @@
+10:46:37.515 [main] INFO  com.anz.common.cache.impl.AbstractCacheHandler - Caching Provider=org.ehcache.jcache.JCacheCachingProvider@eac2460
+10:46:38.203 [main] INFO  com.anz.common.cache.impl.AbstractCacheHandler - Cache Manager=org.ehcache.jcache.JCacheManager@990553a0 loaded from file:/root/git/anz-iib-commons/target/classes/com/anz/common/cache/impl/ehcache-localcache.xml

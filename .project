@@ -1,17 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>anz-iib-commons</name>
+	<name>anz-iib-commons-lib</name>
 	<comment></comment>
 	<projects>
+		<project>anz-iib-commons</project>
+		<project>anz-iib-dependencies</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
+			<name>com.ibm.etools.mft.applib.applibbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.ibm.etools.mft.java.builder.javabuilder</name>
+			<name>com.ibm.etools.mft.applib.applibresourcevalidator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.connector.policy.ui.PolicyBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.connector.ui.editor.connectorServiceBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.connector.ui.editor.connectorEventBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.uri.sharedlibbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.applib.mbprojectbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.msg.validation.dfdl.mlibdfdlbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.flow.adapters.adapterbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.flow.sca.scabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.msg.validation.dfdl.mbprojectresourcesbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.esql.lang.esqllangbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.map.builder.mslmappingbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.flow.msgflowxsltbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.flow.msgflowbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.decision.service.ui.decisionservicerulebuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.mft.pattern.capture.PatternBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.ibm.etools.msg.validation.dfdl.dfdlqnamevalidator</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -21,20 +103,19 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.ibm.etools.mft.jcn.jcnbuilder</name>
+			<name>com.ibm.etools.mft.unittest.ui.TestCaseBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<name>com.ibm.etools.mft.json.builder.JSONBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.eclipse.m2e.core.maven2Nature</nature>
-		<nature>com.ibm.etools.mft.bar.ext.barnature</nature>
-		<nature>com.ibm.etools.mft.jcn.jcnnature</nature>
+		<nature>com.ibm.etools.msgbroker.tooling.libraryNature</nature>
+		<nature>com.ibm.etools.msgbroker.tooling.messageBrokerProjectNature</nature>
+		<nature>com.ibm.etools.msgbroker.tooling.sharedLibraryNature</nature>
 	</natures>
 </projectDescription>
