@@ -4,7 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>anz-iib-commons</project>
-		<project>anz-iib-dependencies</project>
+		<project>common-dependencies</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
