@@ -7,7 +7,9 @@ import com.ibm.broker.plugin.MbBroker;
 import com.ibm.broker.plugin.MbMessageFlow;
 
 /**
- * @author root
+ * This object is passed over to the Transformer Classes and ExceptionMessage
+ * 
+ * @author sankestsw
  *
  */
 public class ComputeInfo {

@@ -45,7 +45,6 @@ public class JCache<K, V> implements Cache<K, V> {
 		this.cacheManager = cacheManager;		
 	}
 
-	@SuppressWarnings("unchecked")
 	public V get(K key) {
 		return inMemoryCache.get(key);
 	}

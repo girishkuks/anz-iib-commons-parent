@@ -16,8 +16,6 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 
 import com.ibm.broker.classloading.BrokerClassLoader;
-import com.ibm.broker.jdbctype4.connfact.JDBCType4ConnectionFactory;
-import com.ibm.broker.plugin.MbNode;
 import com.ibm.broker.plugin.MbNode.JDBC_TransactionType;
 
 /**
@@ -102,6 +100,7 @@ public class IIBJdbc4DataSource implements DataSource {
 		logger.debug("transactionType=" + paramJDBC_TransactionType);
 
 		try {
+			@SuppressWarnings("rawtypes")
 			Class localClass = BrokerClassLoader
 					.getInstance()
 					.loadClass(

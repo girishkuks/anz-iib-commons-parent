@@ -20,46 +20,47 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 	/* (non-Javadoc)
 	 * @see com.anz.common.compute.impl.CommonJavaCompute#execute(com.ibm.broker.plugin.MbMessageAssembly, com.ibm.broker.plugin.MbMessageAssembly)
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public void execute(MbMessageAssembly inAssembly,
 			MbMessageAssembly outAssembly) throws Exception {
 		try {
-		MbMessage inMessage = inAssembly.getMessage();
-		MbMessage outMessage = outAssembly.getMessage();
-		
-		/* 
-		 * Set the compute node in the node factory so that 
-		 * Transform classes can use the jdbc type4 connection datasource later
-		 * @see #IIBJdbc4DataSource
-		 * @see #AnzSpringIoCFactory
-		 */
-		MbNodefactory.getInstance().setMbNode(this);
-		
-		
-		/*
-		 * Set the HTTPResponseHeader to Http 1.0/500 Internal Server Error
-		 * Only for HTTP flows and when the error is not already set something else
-		 * This block will be executed for internal errors in transformation such as NullPointerExceptions etc. 
-		 */
-		TransformType transformType = getTransformationType();
-		if((transformType.equals(TransformType.HTTP_HHTP) || transformType.equals(TransformType.HTTP_MQ))
-				&& outMessage.getRootElement().getFirstElementByPath("HTTPResponseHeader") == null) {
-			MbElement replyStatusCode = ComputeUtils.setHttpReplyStatus(outAssembly, "500");
-			logger.info("Setting http reply status code: ", replyStatusCode);
-		}
-		
-		
-		String outputJson = executeTranformation(outAssembly);
-		if (outputJson != null) {
-			// Detach Original Exception Node from the response
-			MbElement exception = outAssembly.getExceptionList().getRootElement().getFirstChild();
-			if(exception != null)
-				exception.detach();
+			MbMessage inMessage = inAssembly.getMessage();
+			MbMessage outMessage = outAssembly.getMessage();
 			
-			// Write this outputJson to outMessage
-			ComputeUtils.replaceStringAsBlob(outMessage, outputJson);
-		}
-		}catch(Exception e) {
+			/* 
+			 * Set the compute node in the node factory so that 
+			 * Transform classes can use the jdbc type4 connection datasource later
+			 * @see #IIBJdbc4DataSource
+			 * @see #AnzSpringIoCFactory
+			 */
+			MbNodefactory.getInstance().setMbNode(this);
+			
+			
+			/*
+			 * Set the HTTPResponseHeader to Http 1.0/500 Internal Server Error
+			 * Only for HTTP flows and when the error is not already set something else
+			 * This block will be executed for internal errors in transformation such as NullPointerExceptions etc. 
+			 */
+			TransformType transformType = getTransformationType();
+			if((transformType.equals(TransformType.HTTP_HHTP) || transformType.equals(TransformType.HTTP_MQ))
+					&& outMessage.getRootElement().getFirstElementByPath("HTTPResponseHeader") == null) {
+				MbElement replyStatusCode = ComputeUtils.setHttpReplyStatus(outAssembly, "500");
+				logger.info("Setting http reply status code: ", replyStatusCode);
+			}
+			
+			
+			String outputJson = executeTranformation(outAssembly);
+			if (outputJson != null) {
+				// Detach Original Exception Node from the response
+				MbElement exception = outAssembly.getExceptionList().getRootElement().getFirstChild();
+				if(exception != null)
+					exception.detach();
+				
+				// Write this outputJson to outMessage
+				ComputeUtils.replaceStringAsBlob(outMessage, outputJson);
+			}
+		} catch(Exception e) {
 			logger.throwing(e);
 			throw e;
 		}

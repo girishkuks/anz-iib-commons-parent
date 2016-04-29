@@ -1,6 +1,5 @@
 package com.anz.common.cache.impl;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.cache.Cache;
@@ -15,8 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import com.anz.common.cache.jcache.JCacheCachingProvider;
-
 /**
  * @author sanketsw
  * 
@@ -27,6 +24,7 @@ public class ehCacheCachingProviderTest extends TestCase {
 
 	private CachingProvider provider;
 	private CacheManager cacheManager;
+	@SuppressWarnings("rawtypes")
 	private Cache cache;
 
 	/*

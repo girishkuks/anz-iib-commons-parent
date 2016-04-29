@@ -1,11 +1,7 @@
 package com.anz.common.dataaccess.daos.iib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.anz.common.dataaccess.daos.AbstractDaoTest;
 import com.anz.common.dataaccess.daos.ILookupDao;
 
 

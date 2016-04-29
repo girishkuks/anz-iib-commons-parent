@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
-import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 
 import junit.framework.TestCase;
@@ -27,6 +26,7 @@ public class InMemoryCachingProviderTest extends TestCase {
 
 	private CachingProvider provider;
 	private CacheManager cacheManager;
+	@SuppressWarnings("rawtypes")
 	private Cache cache;
 
 	/*

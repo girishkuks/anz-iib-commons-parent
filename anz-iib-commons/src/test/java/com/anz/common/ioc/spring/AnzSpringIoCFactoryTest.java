@@ -1,10 +1,8 @@
 package com.anz.common.ioc.spring;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import javax.sql.DataSource;
-
-import org.junit.Test;
 
 import com.anz.common.dataaccess.daos.ILookupDao;
 import com.anz.common.ioc.IIoCFactory;

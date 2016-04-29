@@ -1,15 +1,11 @@
 package com.anz.common.ioc.spring;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.anz.common.ioc.IIoCFactory;
 import com.ibm.broker.plugin.MbNode;
 
 public class AnzSpringIoCFactory implements IIoCFactory {
-
-	private static final Logger logger = LogManager.getLogger();
 	
 	private static AnzSpringIoCFactory instance;
 	

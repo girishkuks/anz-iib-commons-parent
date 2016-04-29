@@ -3,9 +3,6 @@
  */
 package com.anz.common.compute.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.anz.common.compute.TransformType;
 import com.anz.common.ioc.spring.MbNodefactory;
 import com.anz.common.transform.ITransformer;
@@ -16,7 +13,7 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  * @author sanketsw
  *
  */
-public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
+public abstract class CommonBlobTransformCompute extends CommonJavaCompute {
 
 	/* (non-Javadoc)
 	 * @see com.anz.common.compute.ICommonComputeNode#getTransformationType()
@@ -61,7 +58,6 @@ public abstract class CommonJsonJsonTransformCompute extends CommonJavaCompute {
 	 *            input JSON Data
 	 * @return output JSON Data to be placed in the message
 	 */
-	@SuppressWarnings("unchecked")
 	public String executeJsonToJsonTranform(String inputJson) throws Exception {
 		String outJson = null;
 		//String transformerClassName = getName().substring(getName().indexOf("com"));

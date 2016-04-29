@@ -3,9 +3,6 @@
  */
 package com.anz.common.cache.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.anz.common.cache.jcache.JCacheCachingProvider;
 
 /**
@@ -16,8 +13,6 @@ import com.anz.common.cache.jcache.JCacheCachingProvider;
  * 
  */
 public class GlobalCacheHandler extends AbstractCacheHandler {
-
-	private static final Logger logger = LogManager.getLogger();
 
 	private static GlobalCacheHandler _inst = null;
 

@@ -94,6 +94,7 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 * com.ibm.broker.javacompute.MbJavaComputeNode#evaluate(com.ibm.broker.
 	 * plugin.MbMessageAssembly)
 	 */
+	@SuppressWarnings("unused")
 	public void evaluate(MbMessageAssembly inAssembly) throws MbException {
 		MbOutputTerminal out = getOutputTerminal("out");
 		MbOutputTerminal alt = getOutputTerminal("alternate");

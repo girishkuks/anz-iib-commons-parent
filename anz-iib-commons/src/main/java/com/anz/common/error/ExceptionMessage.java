@@ -3,7 +3,6 @@
  */
 package com.anz.common.error;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Properties;
 
