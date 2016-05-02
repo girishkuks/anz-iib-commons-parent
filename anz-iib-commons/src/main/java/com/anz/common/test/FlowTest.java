@@ -213,6 +213,29 @@ public abstract class FlowTest {
 		return dataList;
 
 	}
+	
+	public List<RecordedTestData> getTestDataList(String nodeName, boolean target)
+			throws ConfigManagerProxyPropertyNotInitializedException {
+		// get test data for verification
+		Properties filterProps = new Properties();
+
+		// Get NodeUUID from nodeName
+		String nodeUUID = getNodeUUID(nodeName);
+		logger.info("Testing Node={} UUID={} ", nodeName, nodeUUID);
+		
+		if(target)
+			filterProps.put(Checkpoint.PROPERTY_TARGET_NODE_NAME, nodeUUID);
+		else
+			filterProps.put(Checkpoint.PROPERTY_SOURCE_NODE_NAME, nodeUUID);
+		List<RecordedTestData> dataList = getIntegrationServerProxy()
+				.getRecordedTestData(filterProps);
+
+		assertNotNull(dataList);
+		assertEquals(1, dataList.size());
+		logger.debug(dataList.get(0));
+		return dataList;
+
+	}
 
 	public String getNodeUUID(String nodeName) throws ConfigManagerProxyPropertyNotInitializedException {
 		MessageFlowProxy.Node nodeProxy = flowProxy.getNodeByName(nodeName);
