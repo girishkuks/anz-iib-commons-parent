@@ -80,12 +80,14 @@ public class LookupDomain implements ICacheDomainObject {
 				logger.info("got value in operationDao from data source: {}", lookup.getValue());
 				
 			} catch (Exception e) {
-				logger.error("Could not read from daat source");
+				logger.warn("Could not read from daat source");
 				logger.throwing(e);
 			}
 
-			cacheHandler.updateCache(getDefaultCacheName(), key,
-					TransformUtils.toJSON(lookup));
+			if(lookup != null) {
+				cacheHandler.updateCache(getDefaultCacheName(), key,
+						TransformUtils.toJSON(lookup));
+			}
 
 		}
 

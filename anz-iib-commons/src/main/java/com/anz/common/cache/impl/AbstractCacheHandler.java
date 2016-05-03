@@ -87,7 +87,7 @@ public abstract class AbstractCacheHandler {
 		Cache<String, String> cache = null;
 		if (cacheManager != null) {
 			try {
-				cache = cacheManager.getCache(getDefaultCacheName());
+				cache = cacheManager.getCache(cacheName);
 				// This exception handling for unit test purpose
 				// @see DataSourceSampleTest			
 			} catch(NoSuchMethodError e) {

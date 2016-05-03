@@ -80,12 +80,14 @@ public class OperationDomain implements ICacheDomainObject {
 				logger.info("got value in operationDao from data source: {}", operation.getImeplementation());
 				
 			} catch (Exception e) {
-				logger.error("Could not read from daat source");
+				logger.warn("Could not read from daat source");
 				logger.throwing(e);
 			}
 
-			cacheHandler.updateCache(getDefaultCacheName(), key,
-					TransformUtils.toJSON(operation));
+			if(operation != null) {
+				cacheHandler.updateCache(getDefaultCacheName(), key,
+						TransformUtils.toJSON(operation));
+			}
 
 		}
 

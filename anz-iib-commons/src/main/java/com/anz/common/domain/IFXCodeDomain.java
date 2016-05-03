@@ -81,12 +81,14 @@ public class IFXCodeDomain implements ICacheDomainObject {
 				logger.info("got value in operationDao from data source: {}", errorCode.getKey());
 				
 			} catch (Exception e) {
-				logger.error("Could not read from data source");
+				logger.warn("Could not read from data source");
 				logger.throwing(e);
 			}
 
-			cacheHandler.updateCache(getDefaultCacheName(), key,
-					TransformUtils.toJSON(errorCode));
+			if(errorCode == null) {
+				cacheHandler.updateCache(getDefaultCacheName(), key,
+						TransformUtils.toJSON(errorCode));
+			}
 
 		}
 

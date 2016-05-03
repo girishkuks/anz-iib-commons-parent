@@ -35,37 +35,41 @@ public class ErrorStatusCodeDomain implements ICacheDomainObject {
 	private CacheHandlerFactory cacheHandler = CacheHandlerFactory
 			.getInstance();
 
-	private ErrorStatusCodeDomain() throws Exception {
-		IIoCFactory factory = AnzSpringIoCFactory.getInstance();
-		dao = factory.getBean(IErrorStatusCodeDao.class);
-		if(dao == null) {
-			throw new Exception("Could not instantiate DAO class");
-		}
-		logger.info("operationDao: {}", dao);
-		
-		// Create Some error objects in the database
-		ErrorStatusCode errorCode = dao.findOne("TimeoutException");
-		if(errorCode == null) {
-			// Create a new one 
-			ErrorStatusCode operation2 = new ErrorStatusCode();
-			operation2.setException("TimeoutException");
-			operation2.setCode("300");
-			operation2.setDescr("Timeout Exception occured while trying to connect");
-			operation2.setSeverity(ErrorStatusCode.SEV_CRITICAL);
-			errorCode = dao.saveAndFlush(operation2);
-			logger.info("created new error status code: {}", errorCode.getKey());
-		}
-		
-		errorCode = dao.findOne("InternalException");
-		if(errorCode == null) {
-			// Create a new one 
-			ErrorStatusCode operation2 = new ErrorStatusCode();
-			operation2.setException("InternalException");
-			operation2.setCode("100");
-			operation2.setDescr("Internal Server Error");
-			operation2.setSeverity(ErrorStatusCode.SEV_CRITICAL);
-			errorCode = dao.saveAndFlush(operation2);
-			logger.info("created new error status code: {}", errorCode.getKey());
+	private ErrorStatusCodeDomain() {
+		try {
+			IIoCFactory factory = AnzSpringIoCFactory.getInstance();
+			dao = factory.getBean(IErrorStatusCodeDao.class);
+			if(dao == null) {
+				throw new Exception("Could not instantiate DAO class");
+			}
+			logger.info("operationDao: {}", dao);
+			
+			// Create Some error objects in the database
+			ErrorStatusCode errorCode = dao.findOne("TimeoutException");
+			if(errorCode == null) {
+				// Create a new one 
+				ErrorStatusCode operation2 = new ErrorStatusCode();
+				operation2.setException("TimeoutException");
+				operation2.setCode("300");
+				operation2.setDescr("Timeout Exception occured while trying to connect");
+				operation2.setSeverity(ErrorStatusCode.SEV_CRITICAL);
+				errorCode = dao.saveAndFlush(operation2);
+				logger.info("created new error status code: {}", errorCode.getKey());
+			}
+			
+			errorCode = dao.findOne("InternalException");
+			if(errorCode == null) {
+				// Create a new one 
+				ErrorStatusCode operation2 = new ErrorStatusCode();
+				operation2.setException("InternalException");
+				operation2.setCode("100");
+				operation2.setDescr("Internal Server Error");
+				operation2.setSeverity(ErrorStatusCode.SEV_CRITICAL);
+				errorCode = dao.saveAndFlush(operation2);
+				logger.info("created new error status code: {}", errorCode.getKey());
+			}
+		} catch(Exception e) {
+			logger.warn(e);
 		}
 		
 		
@@ -111,12 +115,14 @@ public class ErrorStatusCodeDomain implements ICacheDomainObject {
 				logger.info("got value in operationDao from data source: {}", errorCode.getKey());
 				
 			} catch (Exception e) {
-				logger.error("Could not read from data source");
+				logger.warn("Could not read from data source");
 				logger.throwing(e);
 			}
 
-			cacheHandler.updateCache(getDefaultCacheName(), key,
-					TransformUtils.toJSON(errorCode));
+			if(errorCode == null) {
+				cacheHandler.updateCache(getDefaultCacheName(), key, TransformUtils.toJSON(errorCode));
+			}
+					
 
 		}
 

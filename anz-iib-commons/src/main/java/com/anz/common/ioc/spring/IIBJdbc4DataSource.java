@@ -24,6 +24,7 @@ import com.ibm.broker.plugin.MbNode.JDBC_TransactionType;
  */
 public class IIBJdbc4DataSource implements DataSource {
 	
+	private static final String JDBC_CONFIG_SERVICE = 'serv2';
 	private static IIBJdbc4DataSource _inst = null;
 	
 	private IIBJdbc4DataSource() {}
@@ -76,7 +77,7 @@ public class IIBJdbc4DataSource implements DataSource {
 
 	public Connection getConnection() throws SQLException {
 		// TODO Auto-generated method stub
-		Connection conn = getJDBCType4Connection("serv2",
+		Connection conn = getJDBCType4Connection(JDBC_CONFIG_SERVICE,
 				JDBC_TransactionType.MB_TRANSACTION_AUTO);
 		return conn;
 	}
@@ -85,7 +86,7 @@ public class IIBJdbc4DataSource implements DataSource {
 			throws SQLException {
 		// TODO Auto-generated method stub
 		Connection conn;
-		conn = getJDBCType4Connection("serv2",
+		conn = getJDBCType4Connection(JDBC_CONFIG_SERVICE,
 				JDBC_TransactionType.MB_TRANSACTION_AUTO);
 		return conn;
 	}
