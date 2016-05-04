@@ -37,6 +37,11 @@ public class TransformUtils {
 		return out;
 	}
 
+	/**
+	 * Converts a string message to a BLOB
+	 * @param message
+	 * @return BLOB
+	 */
 	public static String getBlob(String message) {
 		byte[] bytes = message.getBytes(); 
 	    BigInteger bigInt = new BigInteger(bytes);

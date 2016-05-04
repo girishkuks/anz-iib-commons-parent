@@ -24,7 +24,7 @@ import com.ibm.broker.plugin.MbNode.JDBC_TransactionType;
  */
 public class IIBJdbc4DataSource implements DataSource {
 	
-	private static final String JDBC_CONFIG_SERVICE = 'serv2';
+	private static final String JDBC_CONFIG_SERVICE = "serv2";
 	private static IIBJdbc4DataSource _inst = null;
 	
 	private IIBJdbc4DataSource() {}

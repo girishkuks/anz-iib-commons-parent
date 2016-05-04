@@ -41,11 +41,11 @@ public abstract class CommonBlobTransformCompute extends CommonJavaCompute {
 		MbNodefactory.getInstance().setMbNode(this);
 		
 		
-		String inputJson = ComputeUtils.getStringFromBlob(inMessage);
-		String outputJson = executeJsonToJsonTranform(inputJson);
-		if (outputJson != null) {
+		String inputString = ComputeUtils.getStringFromBlob(inMessage);
+		String outputString = executeBlobTranform(inputString);
+		if (outputString != null) {
 			// Write this outputJson to outMessage
-			ComputeUtils.replaceStringAsBlob(outMessage, outputJson);
+			ComputeUtils.replaceStringAsBlob(outMessage, outputString);
 		}
 		
 	}
@@ -58,19 +58,19 @@ public abstract class CommonBlobTransformCompute extends CommonJavaCompute {
 	 *            input JSON Data
 	 * @return output JSON Data to be placed in the message
 	 */
-	public String executeJsonToJsonTranform(String inputJson) throws Exception {
-		String outJson = null;
+	public String executeBlobTranform(String inputJson) throws Exception {
+		String out = null;
 		//String transformerClassName = getName().substring(getName().indexOf("com"));
 		//logger.info("Creating instance of {}", transformerClassName);
 		try {
 			//ITransformer<String, String> jsonTransformer = (ITransformer<String, String>)Class.forName(transformerClassName).newInstance();
-			ITransformer<String, String> jsonTransformer = getTransformer();
-			outJson = jsonTransformer.execute(inputJson, appLogger, metaData);
+			ITransformer<String, String> stringTransformer = getTransformer();
+			out = stringTransformer.execute(inputJson, appLogger, metaData);
 		} catch(Exception e) {
 			logger.throwing(e);
 			throw e;
 		}
-		return outJson;
+		return out;
 	}
 	
 	/**
