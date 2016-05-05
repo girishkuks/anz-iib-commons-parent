@@ -17,7 +17,7 @@
 			<artifactId>anz-iib-dependencies</artifactId>
 			<version>0.0.1</version>
 			<classifier>jar-with-dependencies</classifier>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>com.ibm.iib</groupId>
 			<artifactId>IntegrationAPI</artifactId>
@@ -59,9 +59,27 @@
 			<systemPath>/root/IIB/iib-10.0.0.4/tools/plugins/com.ibm.etools.mft.jcn_10.0.400.v20160310-1307/javacompute.jar</systemPath>
 		</dependency>
 
-		
+
 
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 	<!-- <build> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
 		<artifactId>maven-surefire-plugin</artifactId> <version>2.19.1</version> 
 		<configuration> <systemPropertyVariables> <javax.cache.spi.CachingProvider>com.anz.common.cache.jcache.JCacheCachingProvider</javax.cache.spi.CachingProvider> 
