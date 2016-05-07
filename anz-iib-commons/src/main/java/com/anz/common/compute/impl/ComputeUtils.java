@@ -181,4 +181,32 @@ public class ComputeUtils {
 		return replyStatusCode;
 	}
 
+	/**
+	 * Insert a new element if does not exist or change value of existing element
+	 * @param value to be set to element
+	 * @param message LocalEnvironment or Message
+	 * @param path an array of strings of the elements in the path e.g. "Destination", "HTTP", "RequestIdentifier"
+	 * @return the element with its value set to new value
+	 * @throws MbException
+	 */
+	public static MbElement setElementInTree(Object value, MbMessage message, String... path ) throws MbException {
+		MbElement prevElement = message.getRootElement();		
+		
+		for(int i=0; i < path.length -1; i++ ) {
+			String elementKey = path[i];
+			MbElement element = prevElement.getFirstElementByPath(elementKey);
+			element = element == null ? 
+					prevElement.createElementAsFirstChild(MbElement.TYPE_NAME, elementKey,null) : 
+						element;
+			prevElement = element;
+		}
+		String lastElementKey = path[path.length -1];	
+		MbElement lastElement = prevElement.getFirstElementByPath(lastElementKey);
+		if(lastElement == null) {
+			lastElement = prevElement.createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, lastElementKey, value);
+		} else {
+			lastElement.setValue(value);
+		}
+		return lastElement;
+	}
 }

@@ -45,8 +45,10 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 			TransformType transformType = getTransformationType();
 			if((transformType.equals(TransformType.HTTP_HHTP) || transformType.equals(TransformType.HTTP_MQ))
 					&& outMessage.getRootElement().getFirstElementByPath("HTTPResponseHeader") == null) {
+
+				ComputeUtils.setElementInTree("application/json", outMessage, "HTTPReplyHeader", "Content-Type");
 				MbElement replyStatusCode = ComputeUtils.setHttpReplyStatus(outAssembly, "500");
-				logger.info("Setting http reply status code: ", replyStatusCode);
+				logger.info("Setting http reply status code: {} ", replyStatusCode);
 			}
 			
 			
