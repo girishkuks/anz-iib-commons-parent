@@ -17,7 +17,7 @@ import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
 import com.ibm.broker.plugin.MbUserException;
 
-public abstract class CommonCobolTransformCompute<I, O> extends	CommonJavaCompute {
+public abstract class CustomParserTransformCompute<I, O> extends	CommonJavaCompute {
 
 	protected static JAXBContext jaxbContext = null;
 

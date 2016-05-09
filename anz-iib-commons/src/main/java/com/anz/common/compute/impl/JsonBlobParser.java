@@ -16,9 +16,9 @@ import com.ibm.broker.plugin.MbMessage;
  * @param <O>
  *
  */
-public class JsonParser<O> extends AbstractParser<O> {
+public class JsonBlobParser<O> extends AbstractParser<O> {
 
-	public JsonParser(Class<O> pojoClass) {
+	public JsonBlobParser(Class<O> pojoClass) {
 		super(pojoClass);
 	}
 

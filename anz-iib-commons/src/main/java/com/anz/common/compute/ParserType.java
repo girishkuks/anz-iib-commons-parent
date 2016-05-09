@@ -5,7 +5,7 @@ package com.anz.common.compute;
 
 import org.skyscreamer.jsonassert.JSONParser;
 
-import com.anz.common.compute.impl.DFDLParser;
+import com.anz.common.compute.impl.JaxbDFDLParser;
 
 /**
  * @author root
@@ -15,7 +15,7 @@ import com.anz.common.compute.impl.DFDLParser;
 public enum ParserType {
 	
 	JSON(JSONParser.class),
-	DFDL(DFDLParser.class);
+	DFDL(JaxbDFDLParser.class);
 	
 	private final Class className;
 	

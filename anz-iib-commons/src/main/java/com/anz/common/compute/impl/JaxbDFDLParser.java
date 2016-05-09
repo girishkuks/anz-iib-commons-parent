@@ -19,9 +19,9 @@ import com.ibm.broker.plugin.MbMessage;
  * @param <O>
  *
  */
-public class DFDLParser<O> extends AbstractParser<O> {
+public class JaxbDFDLParser<O> extends AbstractParser<O> {
 
-	public DFDLParser(Class<O> pojoClass) {
+	public JaxbDFDLParser(Class<O> pojoClass) {
 		super(pojoClass);
 	}
 
