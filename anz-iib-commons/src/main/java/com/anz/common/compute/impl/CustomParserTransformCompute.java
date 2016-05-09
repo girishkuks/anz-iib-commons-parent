@@ -6,12 +6,8 @@ package com.anz.common.compute.impl;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.anz.common.compute.IParser;
-import com.anz.common.compute.ParserType;
 import com.anz.common.transform.ITransformer;
-import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
