@@ -4,7 +4,6 @@
 package com.anz.common.compute.impl;
 
 import com.anz.common.compute.TransformType;
-import com.anz.common.ioc.spring.MbNodefactory;
 import com.anz.common.transform.ITransformer;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
@@ -31,15 +30,6 @@ public abstract class CommonBlobTransformCompute extends CommonJavaCompute {
 		
 		MbMessage inMessage = inAssembly.getMessage();
 		MbMessage outMessage = outAssembly.getMessage();
-		
-		/* 
-		 * Set the compute node in the node factory so that 
-		 * Transform classes can use the jdbc type4 connection datasource later
-		 * @see #IIBJdbc4DataSource
-		 * @see #AnzSpringIoCFactory
-		 */
-		MbNodefactory.getInstance().setMbNode(this);
-		
 		
 		String inputString = ComputeUtils.getStringFromBlob(inMessage);
 		String outputString = executeBlobTranform(inputString);

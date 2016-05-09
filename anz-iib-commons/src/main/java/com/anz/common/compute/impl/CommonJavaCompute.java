@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.anz.common.compute.ComputeInfo;
 import com.anz.common.compute.ICommonJavaCompute;
+import com.anz.common.ioc.spring.MbNodefactory;
 import com.ibm.broker.javacompute.MbJavaComputeNode;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -113,6 +114,15 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 			
 			// ----------------------------------------------------------
 			// Add user code below
+			
+			
+			/* 
+			 * Set the compute node in the node factory so that 
+			 * Transform classes can use the jdbc type4 connection datasource later
+			 * @see #IIBJdbc4DataSource
+			 * @see #AnzSpringIoCFactory
+			 */
+			MbNodefactory.getInstance().setMbNode(this);
 			
 			execute(inAssembly, outAssembly);
 			

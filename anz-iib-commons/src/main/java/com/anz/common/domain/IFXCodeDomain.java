@@ -85,7 +85,7 @@ public class IFXCodeDomain implements ICacheDomainObject {
 				logger.throwing(e);
 			}
 
-			if(errorCode == null) {
+			if(errorCode != null) {
 				cacheHandler.updateCache(getDefaultCacheName(), key,
 						TransformUtils.toJSON(errorCode));
 			}
