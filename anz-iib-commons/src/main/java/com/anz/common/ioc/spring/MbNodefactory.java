@@ -34,7 +34,7 @@ public class MbNodefactory {
 	 * @return the mbNode
 	 */
 	public MbNode getMbNode() {
-		logger.debug("Get mbnode={}", mbNode.getName());
+		logger.debug("Get mbnode={}", mbNode);
 		return mbNode;
 	}
 
