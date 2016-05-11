@@ -8,12 +8,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.anz.common.dataaccess.daos.IErrorStatusCodeDao;
 import com.anz.common.dataaccess.daos.IIFXCodeDao;
+import com.anz.common.dataaccess.daos.IIFXProviderCodeDao;
 import com.anz.common.dataaccess.daos.ILookupDao;
 import com.anz.common.dataaccess.daos.IOperationDao;
+import com.anz.common.dataaccess.daos.IProviderDao;
 import com.anz.common.dataaccess.daos.iib.ErrorStatusCodeDao;
 import com.anz.common.dataaccess.daos.iib.IFXCodeDao;
+import com.anz.common.dataaccess.daos.iib.IFXProviderCodeDao;
 import com.anz.common.dataaccess.daos.iib.LookupDao;
 import com.anz.common.dataaccess.daos.iib.OperationDao;
+import com.anz.common.dataaccess.daos.iib.ProviderDao;
 
 @Configuration
 @EnableJpaRepositories(basePackages={"com.anz.common.dataaccess.daos.iib.repos"})
@@ -40,6 +44,16 @@ public class SpringConfig extends AbstractSpringConfig {
 	@Bean
 	public IIFXCodeDao iFXCodeDao() {
 		return new IFXCodeDao();
+	}
+	
+	@Bean
+	public IProviderDao providerDao() {
+		return new ProviderDao();
+	}
+	
+	@Bean
+	public IIFXProviderCodeDao iFXProviderCodeDao() {
+		return new IFXProviderCodeDao();
 	}
 	
 	@Bean

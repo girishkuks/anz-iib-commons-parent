@@ -9,7 +9,12 @@ import org.apache.logging.log4j.Logger;
 import com.anz.common.cache.ICacheDomainObject;
 import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.dataaccess.daos.IIFXCodeDao;
+import com.anz.common.dataaccess.daos.IIFXProviderCodeDao;
+import com.anz.common.dataaccess.daos.IProviderDao;
+import com.anz.common.dataaccess.daos.iib.IFXProviderCodeDao;
 import com.anz.common.dataaccess.models.iib.IFXCode;
+import com.anz.common.dataaccess.models.iib.IFXProviderCode;
+import com.anz.common.dataaccess.models.iib.Provider;
 import com.anz.common.ioc.IIoCFactory;
 import com.anz.common.ioc.spring.AnzSpringIoCFactory;
 import com.anz.common.transform.TransformUtils;
@@ -41,6 +46,37 @@ public class IFXCodeDomain implements ICacheDomainObject {
 			_inst = new IFXCodeDomain();
 		}
 		return _inst;
+	}
+	
+	/**
+	 * Just for the convenience 
+	 * @throws Exception 
+	 */
+	public void populateIFXCodeDatabase() throws Exception {
+
+		IIoCFactory factory = AnzSpringIoCFactory.getInstance();
+		IIFXCodeDao ifxCodeDao = factory.getBean(IIFXCodeDao.class);
+		IIFXProviderCodeDao ifxProviderCodeDao = factory.getBean(IIFXProviderCodeDao.class);
+		IProviderDao providerDao = factory.getBean(IProviderDao.class);
+		
+		IFXCode o = new IFXCode();
+		o.setCode("178");
+		o.setDescr("Error conencting to the system. Please try again later.");
+		o.setSeverity(IFXCode.SEV_CRITICAL);
+		o.setStatus(IFXCode.STATUS_FAILURE);
+		o = ifxCodeDao.saveAndFlush(o);		
+		
+		Provider p = new Provider();
+		p.setId("CICS");
+		p.setDescr("CICS provider");
+		p = providerDao.saveAndFlush(p);
+		
+		IFXProviderCode i = new IFXProviderCode();
+		i.setCode("15");
+		i.setProvider(p);
+		i.setIfxCode(o);
+		i = ifxProviderCodeDao.saveAndFlush(i);
+		
 	}
 
 	/**

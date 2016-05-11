@@ -4,6 +4,8 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.sql.DataSource;
 
+import org.junit.Test;
+
 import com.anz.common.dataaccess.daos.ILookupDao;
 import com.anz.common.ioc.IIoCFactory;
 
@@ -11,7 +13,7 @@ public class AnzSpringIoCFactoryTest {
 
 	//@Test
 	public void testGetBean() throws Exception {
-		IIoCFactory factory = AnzSpringIoCFactory.getInstance(null);
+		IIoCFactory factory = AnzSpringIoCFactory.getInstance();
 		
 		DataSource ds = factory.getBean("dataSource", DataSource.class);
 		
@@ -23,7 +25,7 @@ public class AnzSpringIoCFactoryTest {
 		assertNotNull(lookupDao.getRepository());
 		assertNotNull(lookupDao.getEntityManager());
 		
-		//assertNotNull(lookupDao.);
+		//assertNotNull(lookupDao.findAll().get(0));
 	}
 
 }
