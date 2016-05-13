@@ -4,6 +4,7 @@
 package com.anz.common.compute.impl;
 
 import org.apache.logging.log4j.LogManager;
+
 import org.apache.logging.log4j.Logger;
 
 import com.anz.common.compute.ComputeInfo;
@@ -131,6 +132,8 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 			
 			execute(inAssembly, outAssembly);
 			
+			executeAfterTransformation(metaData, inAssembly, outAssembly);
+			
 
 			// End of user code
 			// ----------------------------------------------------------
@@ -204,7 +207,19 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 * @param inAssembly
 	 * @param outAssembly
 	 */
-	public abstract void prepareForTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly);
+	public void prepareForTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) {
+		// Default implementation is empty
+	}
+	
+	/**
+	 * This method is executed after transformation
+	 * @param metadata
+	 * @param inAssembly
+	 * @param outAssembly
+	 */
+	public void executeAfterTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) {
+		// Default implementation is empty
+	}
 	
 
 
