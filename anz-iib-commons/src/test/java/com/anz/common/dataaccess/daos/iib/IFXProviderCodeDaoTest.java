@@ -15,11 +15,21 @@ import com.anz.common.dataaccess.daos.IIFXProviderCodeDao;
 import com.anz.common.dataaccess.daos.IProviderDao;
 import com.anz.common.dataaccess.models.iib.IFXCode;
 import com.anz.common.dataaccess.models.iib.IFXProviderCode;
+import com.anz.common.dataaccess.models.iib.IFXProviderCodePk;
 import com.anz.common.dataaccess.models.iib.Provider;
 import com.anz.common.ioc.IIoCFactory;
 import com.anz.common.ioc.spring.AnzSpringIoCFactory;
+import com.anz.common.ioc.spring.TestSpringConfig;
 
 
+/**
+ * Test Cases for IIFXProviderCodeDao
+ * Connect to DB2 database or use in memory H2 database and execute the test cases
+ * By default all tests are executed in memory HSQL.
+ * @see TestSpringConfig
+ * @author sanketsw
+ *
+ */
 public class IFXProviderCodeDaoTest extends AbstractDaoTest {
 
 	@Autowired
@@ -33,14 +43,17 @@ public class IFXProviderCodeDaoTest extends AbstractDaoTest {
 	
 	
 	
+	/**
+	 * Test initialization of ifxProviderCodeDao
+	 */
 	@Test
 	public void testBeanDefinition() {
 		assertNotNull(getIFXProviderCodeDao());
 	}
 	
 	/**
-	 * Just for the convenience 
-	 * @throws Exception 
+	 * Just for the convenience - write to the database if the database is empty
+	 * @throws Exception if any
 	 */
 	public void populateIFXCodeDatabase() throws Exception {
 
@@ -77,13 +90,29 @@ public class IFXProviderCodeDaoTest extends AbstractDaoTest {
 		this.ifxProviderCodeDao = ifxProviderCodeDao;
 	}
 	
+	/**
+	 * Test query of  IFXProviderCode using composite key class and using JPA query method
+	 * @throws Exception
+	 */
 	@Test
 	public void testIFXProviderCode() throws Exception {
-		populateIFXCodeDatabase();
+		populateIFXCodeDatabase();		
 		assertNotNull(ifxProviderCodeDao.findAll().get(0));
-		List<IFXProviderCode> codes = ifxProviderCodeDao.findByProviderIdAndIfxCodeCode("CICS", "178");
+		
+		// using composite key class
+		List<IFXProviderCode> codes = ifxProviderCodeDao.findByProviderIdAndCode("CICS", "15");
 		assertNotNull(codes);
 		assertNotNull(codes.get(0));
-		assertEquals("15", codes.get(0).getCode());
+		assertEquals("178", codes.get(0).getIfxCode().getCode());
+		
+		// using JPA query method
+		IFXProviderCodePk key = new IFXProviderCodePk();
+		key.setCode("15");
+		key.setProvider("CICS");
+		IFXProviderCode code = ifxProviderCodeDao.findOne(key);
+		assertNotNull(code);
+		assertEquals("178", code.getIfxCode().getCode());
 	}
+	
+
 }

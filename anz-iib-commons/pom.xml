@@ -27,8 +27,23 @@
 			<scope>test</scope>
 		</dependency>
 
-		
-		
+
+		<!-- DB2 Jars for unit tests-->
+		<dependency>
+			<groupId>com.ibm.db2.jcc</groupId>
+			<artifactId>db2jcc</artifactId>
+			<version>3.8.47</version>
+			<scope>system</scope>
+			<systemPath>/opt/ibm/db2/V10.5/java/db2jcc.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.db2.jcc</groupId>
+			<artifactId>db2jcc_license_cu</artifactId>
+			<version>3.8.47</version><scope>system</scope>
+			<systemPath>/opt/ibm/db2/V10.5/java/db2jcc_license_cu.jar</systemPath>
+		</dependency>
+
+		<!-- IIB JARS -->
 		<dependency>
 			<groupId>com.ibm.iib</groupId>
 			<artifactId>IntegrationAPI</artifactId>

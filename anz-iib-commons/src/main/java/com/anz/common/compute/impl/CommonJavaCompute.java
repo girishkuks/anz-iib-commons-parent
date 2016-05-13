@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import com.anz.common.compute.ComputeInfo;
 import com.anz.common.compute.ICommonJavaCompute;
 import com.anz.common.ioc.spring.MbNodefactory;
+import com.ibm.broker.config.proxy.MessageFlowProxy;
 import com.ibm.broker.javacompute.MbJavaComputeNode;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -25,8 +26,8 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 		ICommonJavaCompute {
 	
 	
-	static Logger logger = LogManager.getLogger();
-	static Logger appLogger = LogManager.getLogger();
+	protected static Logger logger = LogManager.getLogger();
+	protected static Logger appLogger = LogManager.getLogger();
 	
 	ComputeInfo metaData;
 	
@@ -124,6 +125,9 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 			 */
 			MbNodefactory.getInstance().setMbNode(this);
 			
+			// set the user defined properties as required
+			prepareForTransformation(metaData, inAssembly, outAssembly);
+			
 			execute(inAssembly, outAssembly);
 			
 
@@ -175,6 +179,17 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 */
 	public abstract void  execute(MbMessageAssembly inAssembly,
 			MbMessageAssembly outAssembly) throws Exception;
+	
+	/**
+	 * Save any user provided properties to local environment or to metadata for this instance of message flow execution
+	 * Such as Incident Area
+	 * These values will be available to transformer class in metadata
+	 * @param metadata
+	 * @param inAssembly
+	 * @param outAssembly
+	 */
+	public abstract void prepareForTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly);
+	
 
 
 

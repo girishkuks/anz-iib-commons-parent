@@ -70,11 +70,6 @@ public abstract class CommonBlobTransformCompute extends CommonJavaCompute {
 	public abstract ITransformer<String, String> getTransformer();
 
 	
-	/**
-	 * Save any user provided properties to local environment for this instance of message flow execution
-	 * Such as Incident Area
-	 * @param outAssembly
-	 */
-	public abstract void saveUserProvidedProperties(MbMessageAssembly outAssembly);
+	
 
 }

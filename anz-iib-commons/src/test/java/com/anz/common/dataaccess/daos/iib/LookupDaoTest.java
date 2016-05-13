@@ -9,6 +9,11 @@ import com.anz.common.dataaccess.daos.AbstractDaoTest;
 import com.anz.common.dataaccess.daos.ILookupDao;
 
 
+/**
+ * Test Cases for ILookupDao bean definition creation
+ * @author sanketsw
+ *
+ */
 public class LookupDaoTest extends AbstractDaoTest {
 
 	@Autowired

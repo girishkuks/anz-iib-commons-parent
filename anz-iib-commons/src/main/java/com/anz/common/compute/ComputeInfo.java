@@ -3,6 +3,9 @@
  */
 package com.anz.common.compute;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ibm.broker.plugin.MbBroker;
 import com.ibm.broker.plugin.MbMessageFlow;
 
@@ -19,7 +22,9 @@ public class ComputeInfo {
 	MbBroker broker;
 	
 	String computeName;
-
+	
+	Map<String, String> userDefinedProperties = new HashMap<String, String>();
+	
 	/**
 	 * @return the messageFlow
 	 */
@@ -61,6 +66,33 @@ public class ComputeInfo {
 	public void setComputeName(String computeName) {
 		this.computeName = computeName;
 	}
+
+	/**
+	 * @return the userDefinedProperties
+	 */
+	public Map<String, String> getUserDefinedProperties() {
+		return userDefinedProperties;
+	}
+
+	/**
+	 * @param userDefinedProperties the userDefinedProperties to set
+	 */
+	public void setUserDefinedProperties(Map<String, String> userDefinedProperties) {
+		this.userDefinedProperties = userDefinedProperties;
+	}
+
+	/**
+	 * Add userDefinedAttribute to the map
+	 * @param userDefinedAttribute key (User Defined Property)
+	 * @param value (Value of the User Defined Property)
+	 */
+	public void addUserDefinedProperty(String userDefinedAttribute, String value) {
+		if(userDefinedProperties.get(userDefinedAttribute) != null) {
+			userDefinedProperties.remove(userDefinedAttribute);
+		}
+		userDefinedProperties.put(userDefinedAttribute, value);
+	}
+	
 	
 			
 

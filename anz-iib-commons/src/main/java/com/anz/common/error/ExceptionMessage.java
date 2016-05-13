@@ -6,8 +6,11 @@ package com.anz.common.error;
 import java.util.Date;
 import java.util.Properties;
 
+import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.compute.ComputeInfo;
+import com.anz.common.compute.impl.ComputeUtils;
 import com.anz.common.dataaccess.models.iib.ErrorStatusCode;
+import com.anz.common.transform.TransformUtils;
 import com.ibm.broker.config.proxy.BrokerProxy;
 import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
 import com.ibm.broker.config.proxy.ConfigManagerProxyPropertyNotInitializedException;
@@ -20,6 +23,8 @@ import com.ibm.broker.config.proxy.ConfigurableService;
  */
 public class ExceptionMessage {
 	
+	String id;
+	
 	ErrorStatusCode status;
 	
 	ServiceInfo service;
@@ -31,6 +36,8 @@ public class ExceptionMessage {
 	Date timestamp;
 	
 	String message;
+	
+	
 
 	/**
 	 * @return the status
@@ -117,6 +124,21 @@ public class ExceptionMessage {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}	
 
 	public void setBrokerAndServiceDetails(ComputeInfo metadata) {
 		BrokerInfo broker = new BrokerInfo();
@@ -131,16 +153,12 @@ public class ExceptionMessage {
 		
 	}
 
-	public void setStaticProperties() throws ConfigManagerProxyLoggedException, InterruptedException, ConfigManagerProxyPropertyNotInitializedException {
-		
-		BrokerProxy b = BrokerProxy.getLocalInstance();
-		while(!b.hasBeenPopulatedByBroker()) { Thread.sleep(100); } 
-		ConfigurableService myUDCS = b.getConfigurableService("UserDefined", "NodeProperties");
-		Properties props = myUDCS.getProperties();
-		
-		String region = props.getProperty("Region");
-		getBroker().setRegion(region);
-	}	
+	public void setStaticProperties() throws Exception {
+
+		broker.setRegion(ComputeUtils.getGlobalVariable("Region"));
+
+	}
+
 	
 
 }

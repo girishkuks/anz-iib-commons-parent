@@ -6,12 +6,13 @@ import com.anz.common.dataaccess.AbstractDao;
 import com.anz.common.dataaccess.daos.IIFXProviderCodeDao;
 import com.anz.common.dataaccess.daos.iib.repos.IFXProviderCodeRepository;
 import com.anz.common.dataaccess.models.iib.IFXProviderCode;
+import com.anz.common.dataaccess.models.iib.IFXProviderCodePk;
 
-public class IFXProviderCodeDao extends AbstractDao<IFXProviderCode, String, IFXProviderCodeRepository> implements IIFXProviderCodeDao {
+public class IFXProviderCodeDao extends AbstractDao<IFXProviderCode, IFXProviderCodePk, IFXProviderCodeRepository> implements IIFXProviderCodeDao {
 
-	public List<IFXProviderCode> findByProviderIdAndIfxCodeCode(String provider,
+	public List<IFXProviderCode> findByProviderIdAndCode(String provider,
 			String ifxCode) {
-		return getRepository().findByProviderIdAndIfxCodeCode(provider, ifxCode);
+		return getRepository().findByProviderIdAndCode(provider, ifxCode);
 	}
 
 }

@@ -13,6 +13,7 @@ import com.anz.common.dataaccess.daos.IIFXProviderCodeDao;
 import com.anz.common.dataaccess.daos.IProviderDao;
 import com.anz.common.dataaccess.models.iib.IFXCode;
 import com.anz.common.dataaccess.models.iib.IFXProviderCode;
+import com.anz.common.dataaccess.models.iib.IFXProviderCodePk;
 import com.anz.common.dataaccess.models.iib.Provider;
 import com.anz.common.ioc.IIoCFactory;
 import com.anz.common.ioc.spring.AnzSpringIoCFactory;
@@ -47,20 +48,50 @@ public class IFXCodeDomain implements ICacheDomainObject {
 		return _inst;
 	}
 	
+	/**
+	 * Just for the convenience 
+	 * @throws Exception 
+	 */
+	public void populateIFXCodeDatabase() throws Exception {
+
+		IIoCFactory factory = AnzSpringIoCFactory.getInstance();
+		IIFXCodeDao ifxCodeDao = factory.getBean(IIFXCodeDao.class);
+		IIFXProviderCodeDao ifxProviderCodeDao = factory.getBean(IIFXProviderCodeDao.class);
+		IProviderDao providerDao = factory.getBean(IProviderDao.class);
+		
+		IFXCode o = new IFXCode();
+		o.setCode("178");
+		o.setDescr("Error conencting to the system. Please try again later.");
+		o.setSeverity(IFXCode.SEV_CRITICAL);
+		o.setStatus(IFXCode.STATUS_FAILURE);
+		o = ifxCodeDao.saveAndFlush(o);		
+		
+		Provider p = new Provider();
+		p.setId("CICS");
+		p.setDescr("CICS provider");
+		p = providerDao.saveAndFlush(p);
+		
+		IFXProviderCode i = new IFXProviderCode();
+		i.setProvider(p);
+		i.setIfxCode(o);
+		i.setCode("15");
+		i = ifxProviderCodeDao.saveAndFlush(i);
+		
+	}
 
 
 	/**
-	 * Get the error code details from the cache or static database
-	 * 
-	 * @param key
-	 * @return
+	 * Get the IFX code details from the cache or static database
+	 * @param providerErrorCode
+	 * @param providerId
+	 * @return IFX code from cache or database
 	 */
-	public IFXCode getErrorCode(String key) {
+	public IFXCode getErrorCode(String providerErrorCode, String providerId) {
 
 		String json = null;
 		IFXCode errorCode = null;
 
-		json = cacheHandler.lookupCache(getDefaultCacheName(), key);
+		json = cacheHandler.lookupCache(getDefaultCacheName(), getCacheKey(providerErrorCode, providerId));
 
 		if (json != null) {
 			errorCode = TransformUtils.fromJSON(json, IFXCode.class);
@@ -70,21 +101,16 @@ public class IFXCodeDomain implements ICacheDomainObject {
 			IIoCFactory factory;
 			try {
 				factory = AnzSpringIoCFactory.getInstance();
-				IIFXCodeDao dao = factory.getBean(IIFXCodeDao.class);
-				logger.info("operationDao: {}", dao);
-				errorCode = dao.findOne(key);
-				if(errorCode == null) {
-					// Create a new one 
-					// database is empty
-					IFXCode operation2 = new IFXCode();
-					operation2.setCode(key);
-					operation2.setDescr("Error conencting to the system. Please try again later.");
-					operation2.setSeverity(IFXCode.SEV_CRITICAL);
-					operation2.setStatus(IFXCode.STATUS_FAILURE);
-					errorCode = dao.saveAndFlush(operation2);
-					logger.info("created new operation: {}", errorCode.getKey());
+				IIFXProviderCodeDao dao = factory.getBean(IIFXProviderCodeDao.class);
+				IFXProviderCodePk ifxProviderCodeKey = new IFXProviderCodePk();
+				ifxProviderCodeKey.setCode(providerErrorCode);
+				ifxProviderCodeKey.setProvider(providerId);
+				IFXProviderCode code = dao.findOne(ifxProviderCodeKey);
+				if(code == null) {
+					throw new Exception("No object found macthing: " + providerErrorCode + ":" + providerId);
 				}
-				logger.info("got value in operationDao from data source: {}", errorCode.getKey());
+				errorCode = code.getIfxCode();
+				logger.info("got value in Dao from data source: {}", errorCode);
 				
 			} catch (Exception e) {
 				logger.warn("Could not read from data source");
@@ -92,13 +118,17 @@ public class IFXCodeDomain implements ICacheDomainObject {
 			}
 
 			if(errorCode != null) {
-				cacheHandler.updateCache(getDefaultCacheName(), key,
+				cacheHandler.updateCache(getDefaultCacheName(), getCacheKey(providerErrorCode, providerId),
 						TransformUtils.toJSON(errorCode));
 			}
 
 		}
 
 		return errorCode;
+	}
+
+	private String getCacheKey(String providerErrorCode, String providerId) {
+		return providerErrorCode + ":" + providerId;
 	}
 
 	public String getDefaultCacheName() {

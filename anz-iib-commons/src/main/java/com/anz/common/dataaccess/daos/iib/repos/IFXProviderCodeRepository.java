@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.anz.common.dataaccess.models.iib.IFXProviderCode;
+import com.anz.common.dataaccess.models.iib.IFXProviderCodePk;
 
-public interface IFXProviderCodeRepository extends JpaRepository<IFXProviderCode, String> {
+public interface IFXProviderCodeRepository extends JpaRepository<IFXProviderCode, IFXProviderCodePk> {
 	
-	public List<IFXProviderCode> findByProviderIdAndIfxCodeCode(String provider, String ifxCode);
+	public List<IFXProviderCode> findByProviderIdAndCode(String provider, String code);
 
 }

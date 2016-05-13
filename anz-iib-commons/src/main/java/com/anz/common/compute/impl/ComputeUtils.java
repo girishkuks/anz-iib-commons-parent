@@ -3,6 +3,14 @@
  */
 package com.anz.common.compute.impl;
 
+import java.util.Properties;
+
+import com.anz.common.cache.impl.CacheHandlerFactory;
+import com.anz.common.transform.TransformUtils;
+import com.ibm.broker.config.proxy.BrokerProxy;
+import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
+import com.ibm.broker.config.proxy.ConfigManagerProxyPropertyNotInitializedException;
+import com.ibm.broker.config.proxy.ConfigurableService;
 import com.ibm.broker.plugin.MbBLOB;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -208,5 +216,24 @@ public class ComputeUtils {
 			lastElement.setValue(value);
 		}
 		return lastElement;
+	}
+
+	public static String getGlobalVariable(String key) throws Exception {
+		Properties props = null;
+		String value = CacheHandlerFactory.getInstance().lookupCache("UserDefinedPropetiesCache", "nodeProperties");
+		if(value == null) { 
+			BrokerProxy b = BrokerProxy.getLocalInstance();
+			while(!b.hasBeenPopulatedByBroker()) { Thread.sleep(100); } 
+			ConfigurableService myUDCS = b.getConfigurableService("UserDefined", "NodeProperties");
+			props = myUDCS.getProperties();
+			if(props != null) {
+				CacheHandlerFactory.getInstance().updateCache("UserDefinedPropetiesCache", "nodeProperties", TransformUtils.toJSON(props));
+			}
+		} else {
+			props = TransformUtils.fromJSON(value, Properties.class);
+		}
+		
+		String variable = props.getProperty(key);
+		return variable;
 	}
 }
