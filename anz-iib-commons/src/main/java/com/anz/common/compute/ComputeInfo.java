@@ -23,6 +23,8 @@ public class ComputeInfo {
 	
 	String computeName;
 	
+	OutputTarget outputTarget;
+	
 	Map<String, String> userDefinedProperties = new HashMap<String, String>();
 	
 	/**
@@ -91,6 +93,20 @@ public class ComputeInfo {
 			userDefinedProperties.remove(userDefinedAttribute);
 		}
 		userDefinedProperties.put(userDefinedAttribute, value);
+	}
+
+	/**
+	 * @return the outputTarget
+	 */
+	public OutputTarget getOutputTarget() {
+		return outputTarget;
+	}
+
+	/**
+	 * @param outputTarget the outputTarget to set
+	 */
+	public void setOutputTarget(OutputTarget outputTarget) {
+		this.outputTarget = outputTarget;
 	}
 	
 	

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.anz.common.compute.ComputeInfo;
 import com.anz.common.compute.ICommonJavaCompute;
+import com.anz.common.compute.OutputTarget;
 import com.anz.common.ioc.spring.MbNodefactory;
 import com.ibm.broker.config.proxy.MessageFlowProxy;
 import com.ibm.broker.javacompute.MbJavaComputeNode;
@@ -33,6 +34,8 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	
 
 	/**
+	 * The compute information to be used for transformation
+	 * This information is available to the transformer classes as well.
 	 * @return the metaData
 	 */
 	public ComputeInfo getMetaData() {
@@ -99,9 +102,7 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 */
 	@SuppressWarnings("unused")
 	public void evaluate(MbMessageAssembly inAssembly) throws MbException {
-		MbOutputTerminal out = getOutputTerminal("out");
-		MbOutputTerminal alt = getOutputTerminal("alternate");
-
+		
 		MbMessage inMessage = inAssembly.getMessage();
 		MbMessageAssembly outAssembly = null;
 		try {
@@ -148,9 +149,24 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 		}
 		// The following should only be changed
 		// if not propagating message to the 'out' terminal
-		out.propagate(outAssembly);
+		getOutputTerminal().propagate(outAssembly);
 
 	}
+
+
+	private MbOutputTerminal getOutputTerminal() {
+
+		MbOutputTerminal out = getOutputTerminal("out");
+		MbOutputTerminal alt = getOutputTerminal("alternate");
+		
+		if(OutputTarget.ALTERNATE == metaData.getOutputTarget()) {
+			return alt;
+		}
+		
+		return out;
+
+	}
+
 
 
 	protected void copyMessageHeaders(MbMessage inMessage, MbMessage outMessage)
