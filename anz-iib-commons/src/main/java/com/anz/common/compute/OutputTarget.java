@@ -10,6 +10,7 @@ package com.anz.common.compute;
  */
 public enum OutputTarget {
 	DEFAULT, 
-	ALTERNATE
+	ALTERNATE,
+	NONE
 
 }

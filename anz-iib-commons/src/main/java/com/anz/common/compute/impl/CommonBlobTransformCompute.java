@@ -20,7 +20,7 @@ public abstract class CommonBlobTransformCompute extends CommonJavaCompute {
 	 * @see com.anz.common.compute.ICommonComputeNode#getTransformationType()
 	 */
 	public TransformType getTransformationType() {
-		return TransformType.HTTP_HHTP;
+		return TransformType.UNSPECIFIED;
 	}
 
 	/*

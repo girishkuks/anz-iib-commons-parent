@@ -23,6 +23,8 @@ public class ComputeInfo {
 	
 	String computeName;
 	
+	String messageId;
+	
 	OutputTarget outputTarget;
 	
 	Map<String, String> userDefinedProperties = new HashMap<String, String>();
@@ -107,6 +109,20 @@ public class ComputeInfo {
 	 */
 	public void setOutputTarget(OutputTarget outputTarget) {
 		this.outputTarget = outputTarget;
+	}
+
+	/**
+	 * @return the messageId
+	 */
+	public String getMessageId() {
+		return messageId;
+	}
+
+	/**
+	 * @param messageId the messageId to set
+	 */
+	public void setMessageId(String messageId) {
+		this.messageId = messageId;
 	}
 	
 	

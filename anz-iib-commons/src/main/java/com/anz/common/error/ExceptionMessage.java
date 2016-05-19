@@ -37,6 +37,8 @@ public class ExceptionMessage {
 	
 	String message;
 	
+	String incidentArea;
+	
 	
 
 	/**
@@ -138,7 +140,9 @@ public class ExceptionMessage {
 	 */
 	public void setId(String id) {
 		this.id = id;
-	}	
+	}
+	
+	
 
 	public void setBrokerAndServiceDetails(ComputeInfo metadata) {
 		BrokerInfo broker = new BrokerInfo();
@@ -156,7 +160,25 @@ public class ExceptionMessage {
 	public void setStaticProperties() throws Exception {
 
 		broker.setRegion(ComputeUtils.getGlobalVariable("Region"));
+		broker.setClassValue(ComputeUtils.getGlobalVariable("Class"));
+		broker.setForwarder(ComputeUtils.getGlobalVariable("Forwarder"));
+		broker.setHostName(ComputeUtils.getGlobalVariable("HostName"));
+		
 
+	}
+
+	/**
+	 * @return the incidentArea
+	 */
+	public String getIncidentArea() {
+		return incidentArea;
+	}
+
+	/**
+	 * @param incidentArea the incidentArea to set
+	 */
+	public void setIncidentArea(String incidentArea) {
+		this.incidentArea = incidentArea;
 	}
 
 	

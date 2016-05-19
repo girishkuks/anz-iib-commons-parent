@@ -4,7 +4,7 @@
 	monitoring="autodetect" dynamicConfig="true">
 	<!-- see http://www.ehcache.org/ehcache.xml -->
 	<defaultCache maxEntriesLocalHeap="200000" eternal="false"
-		timeToIdleSeconds="40" timeToLiveSeconds="40">
+		timeToIdleSeconds="20" timeToLiveSeconds="20">
 		<persistence strategy="localTempSwap" />
 	</defaultCache>
 </ehcache>

@@ -139,20 +139,26 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 			// ----------------------------------------------------------
 		} catch (MbException e) {
 			// Re-throw to allow Broker handling of MbException
+			logger.throwing(e);
 			throw e;
 		} catch (RuntimeException e) {
 			// Re-throw to allow Broker handling of RuntimeException
+			logger.throwing(e);
 			throw e;
 		} catch (Exception e) {
 			// Consider replacing Exception with type(s) thrown by user code
 			// Example handling ensures all exceptions are re-thrown to be
 			// handled in the flow
+			logger.throwing(e);
 			throw new MbUserException(this, "evaluate()", "", "", e.toString(),
 					null);
 		}
 		// The following should only be changed
 		// if not propagating message to the 'out' terminal
-		getOutputTerminal().propagate(outAssembly);
+		MbOutputTerminal outputTerminal = getOutputTerminal();
+		if(outputTerminal != null) {
+			outputTerminal.propagate(outAssembly);
+		}
 
 	}
 
@@ -164,8 +170,10 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 		
 		if(OutputTarget.ALTERNATE == metaData.getOutputTarget()) {
 			return alt;
+		} else if(OutputTarget.NONE == metaData.getOutputTarget()) {
+			return null;
 		}
-		
+			
 		return out;
 
 	}
@@ -207,7 +215,7 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 * @param inAssembly
 	 * @param outAssembly
 	 */
-	public void prepareForTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) {
+	public void prepareForTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) throws Exception {
 		// Default implementation is empty
 	}
 	
@@ -217,7 +225,7 @@ public abstract class CommonJavaCompute extends MbJavaComputeNode implements
 	 * @param inAssembly
 	 * @param outAssembly
 	 */
-	public void executeAfterTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) {
+	public void executeAfterTransformation(ComputeInfo metadata, MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) throws Exception {
 		// Default implementation is empty
 	}
 	

@@ -9,6 +9,12 @@ public class BrokerInfo {
 	String version;
 	
 	String region;
+	
+	String classValue;
+	
+	String forwarder;
+	
+	String hostName;
 
 	/**
 	 * @return the brokerName
@@ -64,6 +70,48 @@ public class BrokerInfo {
 	 */
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	/**
+	 * @return the classValue
+	 */
+	public String getClassValue() {
+		return classValue;
+	}
+
+	/**
+	 * @param classValue the classValue to set
+	 */
+	public void setClassValue(String classValue) {
+		this.classValue = classValue;
+	}
+
+	/**
+	 * @return the forwarder
+	 */
+	public String getForwarder() {
+		return forwarder;
+	}
+
+	/**
+	 * @param forwarder the forwarder to set
+	 */
+	public void setForwarder(String forwarder) {
+		this.forwarder = forwarder;
+	}
+
+	/**
+	 * @return the hostName
+	 */
+	public String getHostName() {
+		return hostName;
+	}
+
+	/**
+	 * @param hostName the hostName to set
+	 */
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 	
 	

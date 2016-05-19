@@ -5,6 +5,9 @@ package com.anz.common.compute.impl;
 
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.transform.TransformUtils;
 import com.ibm.broker.config.proxy.BrokerProxy;
@@ -23,6 +26,8 @@ import com.ibm.broker.plugin.MbMessageAssembly;
  * 
  */
 public class ComputeUtils {
+	
+	protected static Logger logger = LogManager.getLogger();
 
 	/**
 	 * Converts JSON string to a message tree and assign to outMessage
@@ -217,22 +222,56 @@ public class ComputeUtils {
 		}
 		return lastElement;
 	}
+	
+	/**
+	 * Remove the specified element from the message subtree
+	 * @param message
+	 * @param elementPath
+	 * @throws Exception
+	 */
+	public static void removeElementFromTree(MbMessage message, String elementPath) throws Exception {
+		// Detach Original Exception Node from the response
+		MbElement element = message.getRootElement().getFirstElementByPath(elementPath);
+		if(element != null)
+			element.detach();
+		
+	}
+	
+	/**
+	 * Remove message body from the message subtree
+	 * @param outMessage
+	 * @throws Exception
+	 */
+	public static void removeMessageBody(MbMessage outMessage) throws Exception {
+		// Detach Original Message Body Node from the response
+		MbElement messageBody = outMessage.getRootElement().getLastChild();
+		if(messageBody != null)
+			messageBody.detach();
+		
+	}
 
+	/**
+	 * Get the varible defined from user defined configuratino service named nodeProperties
+	 * @param key varibale name
+	 * @return value in string
+	 * @throws Exception
+	 */
 	public static String getGlobalVariable(String key) throws Exception {
 		Properties props = null;
 		String value = CacheHandlerFactory.getInstance().lookupCache("UserDefinedPropetiesCache", "nodeProperties");
+		logger.info(value);
 		if(value == null) { 
 			BrokerProxy b = BrokerProxy.getLocalInstance();
 			while(!b.hasBeenPopulatedByBroker()) { Thread.sleep(100); } 
-			ConfigurableService myUDCS = b.getConfigurableService("UserDefined", "NodeProperties");
+			ConfigurableService myUDCS = b.getConfigurableService("UserDefined", "nodeProperties");
 			props = myUDCS.getProperties();
 			if(props != null) {
 				CacheHandlerFactory.getInstance().updateCache("UserDefinedPropetiesCache", "nodeProperties", TransformUtils.toJSON(props));
 			}
+			logger.info(TransformUtils.toJSON(props));
 		} else {
 			props = TransformUtils.fromJSON(value, Properties.class);
 		}
-		
 		String variable = props.getProperty(key);
 		return variable;
 	}
