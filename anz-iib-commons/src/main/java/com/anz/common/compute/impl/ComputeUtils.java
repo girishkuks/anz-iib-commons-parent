@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.anz.common.cache.impl.CacheHandlerFactory;
+import com.anz.common.compute.ComputeInfo;
 import com.anz.common.transform.TransformUtils;
 import com.ibm.broker.config.proxy.BrokerProxy;
 import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
@@ -138,34 +139,31 @@ public class ComputeUtils {
 	 * Get the short exception text from the Exceptions Tree of the message
 	 * @param outAssembly
 	 * @return short exception text string delimited by :
-	 * @throws MbException
+	 * @throws Exception 
 	 */
-	public static String getExceptionText(MbMessageAssembly outAssembly)
-			throws MbException {
+	public static String getExceptionText(MbMessageAssembly outAssembly) throws Exception {
 		// This is internal failure in transformation or logic
-		MbElement exception = outAssembly.getExceptionList().getRootElement()
-				.getFirstChild();
+		MbElement exception = outAssembly.getExceptionList().getRootElement().getFirstChild();
 		String exceptionText = null;
-		while (exception != null) {
-			if (exceptionText == null) {
-				exceptionText = "Error";
-			}
-			MbElement insert = exception.getFirstElementByPath("Insert");
-			while (insert != null) {
-				String text = (String) insert.getFirstElementByPath("Text")
-						.getValue();
-				if (text != null && !text.isEmpty()) {
-					exceptionText = exceptionText + ": " + text;
-				}
-				insert = insert.getNextSibling();
-			}
-			if (exception.getNextSibling() != null) {
-				exception = exception.getNextSibling();
-			} else {
-				exception = exception.getFirstChild();
-			}
+		if(exception != null && exception.getFirstChild() != null) {
+			exceptionText = "Error";
+		}
+		exceptionText = formExceptionText(exception, exceptionText);		
+		return exceptionText;
+	}
+
+	private static String formExceptionText(MbElement self, String exceptionText) throws Exception {
+		String text = self.getValueAsString();
+		if (text != null && !text.isEmpty()) {
+			exceptionText = exceptionText + ": " + self.getName() + " " + text;
+		}
+		MbElement child = self.getFirstChild();
+		while(child != null) {
+			exceptionText = formExceptionText(child, exceptionText);
+			child = child.getNextSibling();
 		}
 		return exceptionText;
+		
 	}
 
 	/**
@@ -274,5 +272,34 @@ public class ComputeUtils {
 		}
 		String variable = props.getProperty(key);
 		return variable;
+	}
+
+	/**
+	 * Get Transaction id from the predefined paths
+	 * @param inAssembly
+	 * @return transaction id element
+	 * @throws MbException
+	 */
+	public static MbElement getTransactionId(MbMessageAssembly inAssembly) throws Exception {
+		
+		String[] paths = {"/HTTPInputHeader/Transaction-Id", "/MQMD/MsgId" };
+		MbElement transactionId = null;
+		try {
+		for(String path: paths) {
+			logger.info("Looking for id in {}", path);
+			transactionId = inAssembly.getMessage().getRootElement().getFirstElementByPath(path);
+			if(transactionId != null) {			
+				logger.info("Transaction Id found in {}", path);
+				break;
+			}
+		}		
+		if(transactionId == null) {
+			logger.warn("Transaction Id NOT found in any assigned paths");
+		}
+		}catch(Exception e) {
+			logger.throwing(e);
+		}
+		return transactionId;
+		
 	}
 }

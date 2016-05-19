@@ -143,12 +143,9 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 		MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) throws Exception {
 		super.prepareForTransformation(metadata, inAssembly, outAssembly);		
 		
-		TransformType transformType = getTransformationType();
-		if(transformType.equals(TransformType.HTTP_HHTP) || transformType.equals(TransformType.HTTP_MQ)) {			
-			MbElement transactionId = inAssembly.getMessage().getRootElement().getFirstElementByPath("/HTTPInputHeader/Transaction-Id");
-			if(transactionId != null) {
-				metadata.setMessageId(transactionId.getValueAsString());
-			}
+		MbElement transactionId = ComputeUtils.getTransactionId(outAssembly);
+		if(transactionId != null) {
+			metadata.setMessageId(transactionId.getValueAsString());
 		}
 		
 		metadata.addUserDefinedProperty("IncidentArea", (String) getUserDefinedAttribute("INCIDENT_AREA"));
