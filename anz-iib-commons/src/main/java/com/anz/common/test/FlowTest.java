@@ -53,7 +53,7 @@ public abstract class FlowTest {
 	
 	@BeforeClass
 	public static void initialise() throws ConfigManagerProxyLoggedException,
-			ConfigManagerProxyPropertyNotInitializedException {
+			ConfigManagerProxyPropertyNotInitializedException, InterruptedException {
 		// get broker
 		brokerNodeProxy = BrokerProxy.getLocalInstance(BROKER_NODE_NAME);
 
@@ -78,14 +78,8 @@ public abstract class FlowTest {
 								.setInjectionMode(AttributeConstants.MODE_ENABLED);
 						integrationServerProxy
 								.setTestRecordMode(AttributeConstants.MODE_ENABLED);
-
-						// TODO find a better way to do event handling of
-						// asynchronous calls
-						// sleep for a second as calls above are asynchronous
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-						}
+						
+						while(!integrationServerProxy.hasBeenPopulatedByBroker()) { Thread.sleep(100); } 						
 
 					}
 				} else {
@@ -116,18 +110,20 @@ public abstract class FlowTest {
 			throws ConfigManagerProxyPropertyNotInitializedException,
 			ConfigManagerProxyLoggedException, IOException {
 		integrationServerProxy.clearRecordedTestData();
+		integrationServerProxy
+				.setInjectionMode(AttributeConstants.MODE_DISABLED);
+		integrationServerProxy
+				.setTestRecordMode(AttributeConstants.MODE_DISABLED);
 
 		// enable test injection mode
 		integrationServerProxy
 				.setInjectionMode(AttributeConstants.MODE_ENABLED);
 		integrationServerProxy
 				.setTestRecordMode(AttributeConstants.MODE_ENABLED);
-
-		// TODO find a better way to do event handling of asynchronous calls
-		// sleep for a second as calls above are asynchronous
 		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
+			while(!integrationServerProxy.hasBeenPopulatedByBroker()) { Thread.sleep(100); } 
+		} catch(Exception e) {
+			logger.throwing(e);
 		}
 	}
 
@@ -214,7 +210,7 @@ public abstract class FlowTest {
 
 	}
 	
-	public List<RecordedTestData> getTestDataList(String nodeName, boolean target)
+	public List<RecordedTestData> getTestDataList(String nodeName, boolean targetNode)
 			throws ConfigManagerProxyPropertyNotInitializedException {
 		// get test data for verification
 		Properties filterProps = new Properties();
@@ -223,7 +219,7 @@ public abstract class FlowTest {
 		String nodeUUID = getNodeUUID(nodeName);
 		logger.info("Testing Node={} UUID={} ", nodeName, nodeUUID);
 		
-		if(target)
+		if(targetNode)
 			filterProps.put(Checkpoint.PROPERTY_TARGET_NODE_NAME, nodeUUID);
 		else
 			filterProps.put(Checkpoint.PROPERTY_SOURCE_NODE_NAME, nodeUUID);
