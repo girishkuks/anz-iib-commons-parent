@@ -52,6 +52,9 @@ public class LocalCacheHandlerTest {
 
 		assertEquals("Sample Test in Cache", LocalCacheHandler.getInstance()
 				.getCache("SampleKey").get("test"));
+		Thread.sleep(10000);
+		assertNull(LocalCacheHandler.getInstance()
+				.getCache("SampleKey").get("test"));
 	}
 
 	@Test

@@ -147,8 +147,8 @@ public class ComputeUtils {
 		String exceptionText = null;
 		if(exception != null && exception.getFirstChild() != null) {
 			exceptionText = "Error";
-		}
-		exceptionText = formExceptionText(exception, exceptionText);		
+			exceptionText = formExceptionText(exception, exceptionText);
+		}		
 		return exceptionText;
 	}
 

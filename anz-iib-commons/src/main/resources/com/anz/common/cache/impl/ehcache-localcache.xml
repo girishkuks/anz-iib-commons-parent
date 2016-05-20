@@ -3,8 +3,11 @@
 	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
 	monitoring="autodetect" dynamicConfig="true">
 	<!-- see http://www.ehcache.org/ehcache.xml -->
-	<defaultCache maxEntriesLocalHeap="200000" eternal="false"
-		timeToIdleSeconds="20" timeToLiveSeconds="20">
-		<persistence strategy="localTempSwap" />
-	</defaultCache>
+  	<cache name="SampleKey" maxEntriesLocalHeap="10"
+	    eternal="false"
+	    timeToIdleSeconds="3"
+	    timeToLiveSeconds="5"
+	    overflowToDisk="false">
+  		<persistence strategy="none"></persistence>
+  	</cache>	
 </ehcache>

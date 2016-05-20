@@ -18,8 +18,13 @@ public class AnzSpringIoCFactory implements IIoCFactory {
 		// Load the Spring Context
 		context = new AnnotationConfigApplicationContext();
 		
-		// register the Spring configuration
-		context.register(SpringConfig.class);
+		if(mbNode == null) {
+			// This is running in Junit Test MODE
+			context.register(TestSpringConfig.class);
+		} else {
+			// register the Spring configuration
+			context.register(SpringConfig.class);
+		}
 		
 		context.refresh();		
     }
@@ -52,9 +57,9 @@ public class AnzSpringIoCFactory implements IIoCFactory {
 	public static IIoCFactory getInstance() throws Exception {
 		
 		MbNode computeNode = MbNodefactory.getInstance().getMbNode();
-		if(computeNode == null) {
+		/*if(computeNode == null) {
 			throw new Exception("Could not instantiate the data source. Compute Node is null. Try setting the computeNode in MbNodefactory");
-		}
+		}*/
 		
 		if(instance == null) {
 			instance = new AnzSpringIoCFactory(computeNode);

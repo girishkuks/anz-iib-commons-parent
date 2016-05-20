@@ -3,10 +3,15 @@
  */
 package com.anz.common.cache.impl;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import javax.cache.Cache;
 import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.Duration;
+import javax.cache.expiry.ModifiedExpiryPolicy;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,7 +59,7 @@ public class LocalCacheHandler extends AbstractCacheHandler {
 	 */
 	@Override
 	public Cache<String, String> getCache(String cacheName) {
-		Cache<String, String> cache = cacheManager.getCache(cacheName, String.class, String.class);
+		Cache<String, String> cache = cacheManager.getCache(cacheName);
 		if (cache == null) {
 			MutableConfiguration<String, String> jcacheConfig = new MutableConfiguration<String, String>();
 			jcacheConfig.setTypes(String.class, String.class);
@@ -63,7 +68,7 @@ public class LocalCacheHandler extends AbstractCacheHandler {
 		}
 		return cache;
 	}
-
+	
 	@Override
 	public String getCacheManagerURI() {
 		URL resource = LocalCacheHandler.class.getResource("ehcache-localcache.xml");
