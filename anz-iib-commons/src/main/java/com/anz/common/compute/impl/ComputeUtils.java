@@ -248,16 +248,16 @@ public class ComputeUtils {
 		
 	}
 
+
 	/**
 	 * Get the varible defined from user defined configuratino service named nodeProperties
-	 * @param key varibale name
-	 * @return value in string
+	 * @return
 	 * @throws Exception
 	 */
-	public static String getGlobalVariable(String key) throws Exception {
+	public static Properties getGlobalVariables() throws Exception {
 		Properties props = null;
 		String value = CacheHandlerFactory.getInstance().lookupCache("UserDefinedPropetiesCache", "nodeProperties");
-		logger.info(value);
+		logger.debug(value);
 		if(value == null) { 
 			BrokerProxy b = BrokerProxy.getLocalInstance();
 			while(!b.hasBeenPopulatedByBroker()) { Thread.sleep(100); } 
@@ -269,9 +269,8 @@ public class ComputeUtils {
 			logger.info(TransformUtils.toJSON(props));
 		} else {
 			props = TransformUtils.fromJSON(value, Properties.class);
-		}
-		String variable = props.getProperty(key);
-		return variable;
+		}		
+		return props;
 	}
 
 	/**
@@ -280,25 +279,50 @@ public class ComputeUtils {
 	 * @return transaction id element
 	 * @throws MbException
 	 */
-	public static MbElement getTransactionId(MbMessageAssembly inAssembly) throws Exception {
+	public static String getTransactionId(MbMessageAssembly inAssembly) {
 		
 		String[] paths = {"/HTTPInputHeader/Transaction-Id", "/MQMD/MsgId" };
-		MbElement transactionId = null;
+		String transactionId = null;
+		String requestIdentifier = null;
+		
 		try {
-		for(String path: paths) {
-			logger.info("Looking for id in {}", path);
-			transactionId = inAssembly.getMessage().getRootElement().getFirstElementByPath(path);
-			if(transactionId != null) {			
-				logger.info("Transaction Id found in {}", path);
-				break;
+			MbElement messageRoot = inAssembly.getMessage().getRootElement();
+			for(String path: paths) {
+				logger.debug("Looking for id in {}", path);
+				MbElement transactionIdElem = messageRoot.getFirstElementByPath(path);
+				if(transactionIdElem != null) {	
+					transactionId = transactionIdElem.getValueAsString();
+					logger.info("Transaction Id found in {}", path);
+					break;
+				}
 			}
-		}		
+		} catch(Exception e) { logger.throwing(e); }
+		
+		try {
+			MbElement messageRoot = inAssembly.getMessage().getRootElement();
+			MbElement requestIdentifierElem = inAssembly.getLocalEnvironment().getRootElement().getFirstElementByPath("/Destination/HTTP/RequestIdentifier");
+			if(requestIdentifierElem != null) {
+				byte[] bytes = (byte[]) requestIdentifierElem.getValue();
+				requestIdentifier = new String(bytes);
+			} else {
+				requestIdentifierElem = messageRoot.getFirstElementByPath("/MQMD/CorrelId");
+				requestIdentifier = requestIdentifierElem != null? requestIdentifierElem.getValueAsString(): requestIdentifier;
+			}
+		} catch(Exception e) { logger.throwing(e); }
+		
+		if(requestIdentifier == null) {
+			logger.info("requestIdentifier/CorrelId not found to update transaction id in the cache");
+			return transactionId;
+		} else if(transactionId != null) {
+			CacheHandlerFactory.getInstance().updateCache(CacheHandlerFactory.TransactionIdCache, requestIdentifier, transactionId);
+		} else {
+			transactionId = CacheHandlerFactory.getInstance().lookupCache(CacheHandlerFactory.TransactionIdCache, requestIdentifier);
+			logger.debug("Transaction Id found in cache");
+		}
+		
 		if(transactionId == null) {
-			logger.warn("Transaction Id NOT found in any assigned paths");
-		}
-		}catch(Exception e) {
-			logger.throwing(e);
-		}
+			logger.info("Transaction Id NOT found in any assigned paths");
+		} 
 		return transactionId;
 		
 	}

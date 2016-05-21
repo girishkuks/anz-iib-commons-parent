@@ -6,7 +6,7 @@ package com.anz.common.domain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.anz.common.cache.ICacheDomainObject;
+import com.anz.common.cache.AbstractCacheDomain;
 import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.dataaccess.daos.ILookupDao;
 import com.anz.common.dataaccess.models.iib.Lookup;
@@ -24,7 +24,7 @@ import com.anz.common.transform.TransformUtils;
  * @author sanketsw
  * 
  */
-public class LookupDomain implements ICacheDomainObject {
+public class LookupDomain extends AbstractCacheDomain<Lookup> {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -94,9 +94,11 @@ public class LookupDomain implements ICacheDomainObject {
 		return lookup;
 	}
 
-	public String getDefaultCacheName() {
-		return "LookupCache";
+	@Override
+	public Class<Lookup> getEntityClassType() {
+		return Lookup.class;
 	}
+
 
 	
 }

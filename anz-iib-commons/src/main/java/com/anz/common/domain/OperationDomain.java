@@ -6,7 +6,7 @@ package com.anz.common.domain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.anz.common.cache.ICacheDomainObject;
+import com.anz.common.cache.AbstractCacheDomain;
 import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.dataaccess.daos.IOperationDao;
 import com.anz.common.dataaccess.models.iib.Operation;
@@ -24,7 +24,7 @@ import com.anz.common.transform.TransformUtils;
  * @author sanketsw
  * 
  */
-public class OperationDomain implements ICacheDomainObject {
+public class OperationDomain extends AbstractCacheDomain<Operation> {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -94,8 +94,9 @@ public class OperationDomain implements ICacheDomainObject {
 		return operation;
 	}
 
-	public String getDefaultCacheName() {
-		return "OperationCache";
+	@Override
+	public Class<Operation> getEntityClassType() {
+		return Operation.class;
 	}
 
 	

@@ -59,7 +59,7 @@ public class LocalCacheHandler extends AbstractCacheHandler {
 	 */
 	@Override
 	public Cache<String, String> getCache(String cacheName) {
-		Cache<String, String> cache = cacheManager.getCache(cacheName);
+		Cache<String, String> cache = cacheManager.getCache(cacheName, String.class, String.class);
 		if (cache == null) {
 			MutableConfiguration<String, String> jcacheConfig = new MutableConfiguration<String, String>();
 			jcacheConfig.setTypes(String.class, String.class);

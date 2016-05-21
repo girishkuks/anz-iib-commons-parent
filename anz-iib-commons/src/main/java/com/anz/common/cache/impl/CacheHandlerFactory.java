@@ -16,6 +16,9 @@ import org.apache.logging.log4j.Logger;
  * 
  */
 public class CacheHandlerFactory {
+	
+	public static final String MessageHeaderCache = "MessageHeaderCache";
+	public static final String TransactionIdCache = "TransactionIdCache";
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -45,35 +48,34 @@ public class CacheHandlerFactory {
 	 */
 	public String lookupCache(String cacheName, String objectKey) {
 
+		String cachedObject = null;
+		Cache<String, String> localCache = null;
 		try {
 
-			Cache<String, String> localCache = LocalCacheHandler.getInstance()
-					.getCache(cacheName);
-			String cachedObject = localCache != null ? localCache
-					.get(objectKey) : null;
-
-			if (cachedObject != null) {
-				logger.info("found in the local cache: {} objectKey: {}",
-						cacheName, objectKey);
-				return cachedObject;
-			}
-
-			Cache<String, String> globalCache = GlobalCacheHandler
-					.getInstance().getCache(cacheName);
-			String globalCachedObject = globalCache != null ? globalCache
-					.get(objectKey) : null;
-
-			if (globalCachedObject != null) {
-				logger.info("found in the global cache: {} objectKey: {}",
-						cacheName, objectKey);
-				localCache.put(objectKey, globalCachedObject);
-				return globalCachedObject;
-			}
+			localCache = LocalCacheHandler.getInstance().getCache(cacheName);
+			cachedObject = localCache != null ? localCache.get(objectKey) : null;
 		} catch (Exception e) {
-			logger.warn(e);
+			logger.throwing(e);
 		}
-		logger.info("Not found in any cache: {} objectKey: {}", cacheName,
-				objectKey);
+		if (cachedObject != null) {
+			logger.info("found in the local cache: {} objectKey: {}", cacheName, objectKey);
+			return cachedObject;
+		}
+		try {
+
+			Cache<String, String> globalCache = GlobalCacheHandler.getInstance().getCache(cacheName);
+			cachedObject = globalCache != null ? globalCache.get(objectKey) : null;
+		} catch (Exception e) {
+			logger.throwing(e);
+		}
+		if (cachedObject != null) {
+			logger.info("found in the global cache: {} objectKey: {}", cacheName, objectKey);
+			if(localCache != null) { 
+				localCache.put(objectKey, cachedObject);
+			}
+			return cachedObject;
+		}		
+		logger.info("Not found in any cache: {} objectKey: {}", cacheName, objectKey);
 		return null;
 	}
 
@@ -86,23 +88,20 @@ public class CacheHandlerFactory {
 	public void updateCache(String cacheName, String objectKey,
 			String objectValue) {
 
-		logger.info("updating local and global cache: {} objectKey: {}",
-				cacheName, objectKey);
+		logger.info("updating local and global cache: {} objectKey: {}", cacheName, objectKey);
 		try {
-
-			Cache<String, String> localCache = LocalCacheHandler.getInstance()
-					.getCache(cacheName);
-
+			Cache<String, String> localCache = LocalCacheHandler.getInstance().getCache(cacheName);
 			localCache.remove(objectKey);
 			localCache.put(objectKey, objectValue);
-
-			Cache<String, String> globalCache = GlobalCacheHandler
-					.getInstance().getCache(cacheName);
-
+		} catch (Exception e) {
+			logger.throwing(e);
+		}
+		try {
+			Cache<String, String> globalCache = GlobalCacheHandler.getInstance().getCache(cacheName);
 			globalCache.remove(objectKey);
 			globalCache.put(objectKey, objectValue);
 		} catch (Exception e) {
-			logger.warn(e);
+			logger.throwing(e);
 		}
 
 	}

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.anz.common.compute.ComputeInfo;
+import com.anz.common.compute.LoggingTerminal;
 import com.anz.common.compute.impl.ComputeUtils;
 import com.anz.common.dataaccess.models.iib.ErrorStatusCode;
 import com.anz.common.domain.ErrorStatusCodeDomain;
@@ -56,6 +57,7 @@ public class TransformFailureResponse implements
 
 		ExceptionMessage exceptionMessage = new ExceptionMessage();
 		exceptionMessage.setId(metadata.getMessageId());
+		exceptionMessage.setTerminal(LoggingTerminal.OUTPUT.getValue());
 		exceptionMessage.setIncidentArea(metadata.getUserDefinedProperties().get("IncidentArea"));
 		exceptionMessage.setTimestamp(Calendar.getInstance().getTime());
 		exceptionMessage.setMessage(messageString);
@@ -74,8 +76,7 @@ public class TransformFailureResponse implements
 		}
 		
 		out = TransformUtils.toJSON(exceptionMessage);
-		logger.info("Error Status Code object {}", out);
-		appLogger.error(out);
+		logger.error(out);
 		return out;
 	}
 

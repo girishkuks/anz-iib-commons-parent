@@ -143,9 +143,9 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 		MbMessageAssembly inAssembly, MbMessageAssembly outAssembly) throws Exception {
 		super.prepareForTransformation(metadata, inAssembly, outAssembly);		
 		
-		MbElement transactionId = ComputeUtils.getTransactionId(outAssembly);
+		String transactionId = ComputeUtils.getTransactionId(outAssembly);
 		if(transactionId != null) {
-			metadata.setMessageId(transactionId.getValueAsString());
+			metadata.setMessageId(transactionId);
 		}
 		
 		metadata.addUserDefinedProperty("IncidentArea", (String) getUserDefinedAttribute("INCIDENT_AREA"));
