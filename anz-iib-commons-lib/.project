@@ -3,8 +3,6 @@
 	<name>anz-iib-commons-lib</name>
 	<comment></comment>
 	<projects>
-		<project>anz-iib-commons</project>
-		<project>common-dependencies</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -117,5 +115,6 @@
 		<nature>com.ibm.etools.msgbroker.tooling.libraryNature</nature>
 		<nature>com.ibm.etools.msgbroker.tooling.messageBrokerProjectNature</nature>
 		<nature>com.ibm.etools.msgbroker.tooling.sharedLibraryNature</nature>
+		<nature>com.ibm.etools.mft.bar.ext.barnature</nature>
 	</natures>
 </projectDescription>
