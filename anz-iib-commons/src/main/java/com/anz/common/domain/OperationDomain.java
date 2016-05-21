@@ -99,5 +99,9 @@ public class OperationDomain extends AbstractCacheDomain<Operation> {
 		return Operation.class;
 	}
 
+	@Override
+	public String getDefaultCacheName() {
+		return CacheHandlerFactory.StaticCache;
+	}
 	
 }

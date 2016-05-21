@@ -19,6 +19,7 @@ public class CacheHandlerFactory {
 	
 	public static final String MessageHeaderCache = "MessageHeaderCache";
 	public static final String TransactionIdCache = "TransactionIdCache";
+	public static final String StaticCache = "StaticCache";
 
 	private static final Logger logger = LogManager.getLogger();
 

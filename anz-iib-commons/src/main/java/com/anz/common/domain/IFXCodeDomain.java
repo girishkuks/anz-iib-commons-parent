@@ -136,6 +136,11 @@ public class IFXCodeDomain extends AbstractCacheDomain<IFXCode> {
 		return IFXCode.class;
 	}
 
+	@Override
+	public String getDefaultCacheName() {
+		return CacheHandlerFactory.StaticCache;
+	}
+
 
 	
 }

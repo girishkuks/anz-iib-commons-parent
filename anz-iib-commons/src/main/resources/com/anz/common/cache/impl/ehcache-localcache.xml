@@ -9,5 +9,26 @@
 	    timeToLiveSeconds="5"
 	    overflowToDisk="false">
   		<persistence strategy="none"></persistence>
+  	</cache>
+  	<cache name="StaticCache" maxEntriesLocalHeap="10"
+	    eternal="false"
+	    timeToIdleSeconds="5000"
+	    timeToLiveSeconds="5000"
+	    overflowToDisk="false">
+  		<persistence strategy="none"></persistence>
+  	</cache>
+  	<cache name="MessageHeaderCache" maxEntriesLocalHeap="10"
+	    eternal="false"
+	    timeToIdleSeconds="130"
+	    timeToLiveSeconds="130"
+	    overflowToDisk="false">
+  		<persistence strategy="none"></persistence>
+  	</cache>
+  	<cache name="TransactionIdCache" maxEntriesLocalHeap="10"
+	    eternal="false"
+	    timeToIdleSeconds="130"
+	    timeToLiveSeconds="130"
+	    overflowToDisk="false">
+  		<persistence strategy="none"></persistence>
   	</cache>	
 </ehcache>

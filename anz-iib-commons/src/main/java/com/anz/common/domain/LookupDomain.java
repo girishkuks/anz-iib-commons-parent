@@ -100,5 +100,9 @@ public class LookupDomain extends AbstractCacheDomain<Lookup> {
 	}
 
 
+	@Override
+	public String getDefaultCacheName() {
+		return CacheHandlerFactory.StaticCache;
+	}
 	
 }
