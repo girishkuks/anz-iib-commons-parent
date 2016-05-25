@@ -178,9 +178,11 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 		if(transformType.equals(TransformType.MQ_MQ) || transformType.equals(TransformType.MQ_HTTP)) {
 			MbElement root = outAssembly.getMessage().getRootElement();
 			MbElement replyToQ = root.getFirstElementByPath("/MQMD/ReplyToQ");
-			replyToQ.setValue(replyToQ.getValueAsString().trim());
+			if(replyToQ != null) 
+				replyToQ.setValue(replyToQ.getValueAsString().trim());
 			MbElement replyToQMgr = root.getFirstElementByPath("/MQMD/ReplyToQMgr");
-			replyToQMgr.setValue(replyToQMgr.getValueAsString().trim());
+			if(replyToQMgr != null) 
+				replyToQMgr.setValue(replyToQMgr.getValueAsString().trim());
 			if(replyToQ != null && replyToQ.getValueAsString() != null && !(replyToQ.getValueAsString()).isEmpty()) {
 				logger.info("Setting output node to default. replyToQ: {} replyToQMgr: {}", replyToQ, replyToQMgr);
 				metadata.setOutputTarget(OutputTarget.DEFAULT);
