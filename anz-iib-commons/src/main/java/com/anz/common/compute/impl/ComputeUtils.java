@@ -11,10 +11,13 @@ import org.apache.logging.log4j.Logger;
 import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.compute.ComputeInfo;
 import com.anz.common.transform.TransformUtils;
+import com.ibm.broker.config.proxy.ApplicationProxy;
 import com.ibm.broker.config.proxy.BrokerProxy;
 import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
 import com.ibm.broker.config.proxy.ConfigManagerProxyPropertyNotInitializedException;
 import com.ibm.broker.config.proxy.ConfigurableService;
+import com.ibm.broker.config.proxy.ExecutionGroupProxy;
+import com.ibm.broker.config.proxy.MessageFlowProxy;
 import com.ibm.broker.plugin.MbBLOB;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -326,4 +329,30 @@ public class ComputeUtils {
 		return transactionId;
 		
 	}
+	
+	public static MessageFlowProxy getFlowProxy(String brokerName, String serverName, String appName, String flowName) {
+
+			
+			BrokerProxy broker;
+			
+			try {
+				
+				broker = BrokerProxy.getLocalInstance(brokerName);				
+				ExecutionGroupProxy server = broker.getExecutionGroupByName(serverName);
+				ApplicationProxy app = server.getApplicationByName(appName);
+				MessageFlowProxy flow = app.getMessageFlowByName(flowName);
+				
+				return flow; 
+					
+				
+			} catch (Exception e) {
+				
+				logger.throwing(e);
+			}
+
+			return null;
+
+		
+	}
+	
 }
