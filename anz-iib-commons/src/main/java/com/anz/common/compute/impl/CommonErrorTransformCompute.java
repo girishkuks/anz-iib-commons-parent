@@ -4,6 +4,7 @@
 package com.anz.common.compute.impl;
 
 import com.anz.common.compute.ComputeInfo;
+
 import com.anz.common.compute.OutputTarget;
 import com.anz.common.compute.TransformType;
 import com.anz.common.error.ExceptionMessage;
@@ -226,9 +227,12 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 		
 		logger.info("Refresh UDPs");
 		
-		// Get MessageFlowProxy
-		flow = ComputeUtils.getFlowProxy("TESTNODE_root", "default", "HttpToHttp-app", "Main");
+		
 		try {
+			
+			// Get message flow proxy
+			flow = ComputeUtils.getFlowProxy(getBroker().getName(), getExecutionGroup().getName(), getMessageFlow().getApplicationName(), getMessageFlow().getName());
+			logger.info("flow = {}", flow.toString());
 			
 			// Get user defined properties
 			this.alert = (String) flow.getUserDefinedProperty("ALERT");
