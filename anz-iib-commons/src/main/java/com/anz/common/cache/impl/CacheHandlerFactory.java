@@ -45,7 +45,6 @@ public class CacheHandlerFactory {
 	 * @param cacheName
 	 * @param objectKey
 	 * @return get the object from local or global cache
-	 * @throws Exception
 	 */
 	public String lookupCache(String cacheName, String objectKey) {
 
@@ -84,7 +83,6 @@ public class CacheHandlerFactory {
 	 * @param cacheName
 	 * @param objectKey
 	 * @param objectValue
-	 * @throws Exception
 	 */
 	public void updateCache(String cacheName, String objectKey,
 			String objectValue) {
@@ -106,5 +104,29 @@ public class CacheHandlerFactory {
 		}
 
 	}
+	
+	/**
+	 * Remove an element from local and global cache
+	 * @param cacheName
+	 * @param objectKey
+	 */
+	public void removeFromCache(String cacheName, String objectKey) {
+
+		logger.info("removing from local and global cache: {} objectKey: {}", cacheName, objectKey);
+		try {
+			Cache<String, String> localCache = LocalCacheHandler.getInstance().getCache(cacheName);
+			localCache.remove(objectKey);
+		} catch (Exception e) {
+			logger.throwing(e);
+		}
+		try {
+			Cache<String, String> globalCache = GlobalCacheHandler.getInstance().getCache(cacheName);
+			globalCache.remove(objectKey);
+		} catch (Exception e) {
+			logger.throwing(e);
+		}
+
+	}
+	
 
 }
