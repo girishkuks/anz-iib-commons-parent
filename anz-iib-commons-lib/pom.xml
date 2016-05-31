@@ -155,6 +155,17 @@
 			<groupId>com.anz</groupId>
 			<artifactId>anz-iib-commons</artifactId>
 			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+        			<exclusion>
+         	     			<groupId>*</groupId>
+                 			<artifactId>*</artifactId>
+                		</exclusion>
+            		</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.anz</groupId>
+			<artifactId>anz-iib-dependencies</artifactId>
+			<version>1.0-SNAPSHOT</version>
 			<classifier>jar-with-dependencies</classifier>
 			<exclusions>
         			<exclusion>
