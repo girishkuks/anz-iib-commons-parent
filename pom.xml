@@ -11,6 +11,7 @@
  
 
     <modules>
+		<module>anz-iib-dependencies</module>
 		<module>anz-iib-commons</module>
 		<module>anz-iib-commons-lib</module>
     </modules>
