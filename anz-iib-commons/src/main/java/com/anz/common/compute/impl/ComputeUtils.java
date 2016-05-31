@@ -5,16 +5,20 @@ package com.anz.common.compute.impl;
 
 import java.util.Properties;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.anz.common.cache.impl.CacheHandlerFactory;
 import com.anz.common.compute.ComputeInfo;
 import com.anz.common.transform.TransformUtils;
+import com.ibm.broker.config.proxy.ApplicationProxy;
 import com.ibm.broker.config.proxy.BrokerProxy;
 import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
 import com.ibm.broker.config.proxy.ConfigManagerProxyPropertyNotInitializedException;
 import com.ibm.broker.config.proxy.ConfigurableService;
+import com.ibm.broker.config.proxy.ExecutionGroupProxy;
+import com.ibm.broker.config.proxy.MessageFlowProxy;
 import com.ibm.broker.plugin.MbBLOB;
 import com.ibm.broker.plugin.MbElement;
 import com.ibm.broker.plugin.MbException;
@@ -23,11 +27,13 @@ import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
 
 /**
- * @author sanketsw
+ * @author sanketsw & psamon
  * 
  */
 public class ComputeUtils {
 	
+	private static final int MSG_ID_LENGTH = 24;
+	private static final int INIT_TO_ZERO = 0;
 	protected static Logger logger = LogManager.getLogger();
 
 	/**
@@ -326,4 +332,90 @@ public class ComputeUtils {
 		return transactionId;
 		
 	}
+	
+	
+	/**
+	 * Get MessageFlowProxy object for current flow
+	 * @param brokerName
+	 * @param serverName
+	 * @param appName
+	 * @param flowName
+	 * @return MessageFlowProxy
+	 */
+	public static MessageFlowProxy getFlowProxy(String brokerName, String serverName, String appName, String flowName) {
+			
+			
+			BrokerProxy broker;
+			
+			try {
+				
+				broker = BrokerProxy.getLocalInstance(brokerName);	
+				
+				logger.info("broker = {}", broker);
+				ExecutionGroupProxy server = broker.getExecutionGroupByName(serverName);
+				
+				ApplicationProxy app = server.getApplicationByName(appName);
+				
+				logger.info("server = {}", server);
+				MessageFlowProxy flow = app.getMessageFlowByName(flowName);
+				
+				logger.info("flow = {}", flow);
+				
+				return flow;
+					
+				
+			} catch (Exception e) {
+				
+				logger.throwing(e);
+				
+			}
+
+			return null;
+
+		
+	}
+	
+	
+	/**
+	 * Convert String to MsgId format
+	 * @param id
+	 * @return MsgId as byte array
+	 */
+	public static byte[] getMsgIdFromString(String id) {
+		
+		logger.info("getMsgIdFromString:");
+		
+		byte[] idByteArray = id.getBytes();
+		byte[] msgIdByteArray = new byte[MSG_ID_LENGTH];
+		int difference = MSG_ID_LENGTH - idByteArray.length;	
+		
+		if(difference < 0) {
+			
+			logger.error("ID too long");
+			
+			return null;
+			
+		}	
+
+		int idIndex = INIT_TO_ZERO;
+			
+		for(int msgIndex = INIT_TO_ZERO; msgIndex < MSG_ID_LENGTH; msgIndex++){
+		
+			if(msgIndex < difference){
+					
+				msgIdByteArray[msgIndex] = 0;
+					
+			} else {
+					
+				msgIdByteArray[msgIndex] = idByteArray[idIndex++];
+					
+			}
+				
+		}
+		
+		logger.info("msgIdByteArray = {}", msgIdByteArray);
+		return msgIdByteArray;
+		
+	}
+	
 }

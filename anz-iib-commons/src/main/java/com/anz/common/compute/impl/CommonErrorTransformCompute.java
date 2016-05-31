@@ -4,24 +4,36 @@
 package com.anz.common.compute.impl;
 
 import com.anz.common.compute.ComputeInfo;
+
 import com.anz.common.compute.OutputTarget;
 import com.anz.common.compute.TransformType;
 import com.anz.common.error.ExceptionMessage;
 import com.anz.common.error.TransformFailureResponse;
 import com.anz.common.transform.ITransformer;
 import com.anz.common.transform.TransformUtils;
+import com.ibm.broker.config.proxy.ConfigManagerProxyLoggedException;
+import com.ibm.broker.config.proxy.ConfigManagerProxyPropertyNotInitializedException;
+import com.ibm.broker.config.proxy.MessageFlowProxy;
 import com.ibm.broker.plugin.MbElement;
+import com.ibm.broker.plugin.MbException;
 import com.ibm.broker.plugin.MbMessage;
 import com.ibm.broker.plugin.MbMessageAssembly;
 import com.ibm.broker.plugin.MbOutputTerminal;
 
 /**
- * @author sanketsw
+ * @author sanketsw & psamon
  *
  */
 public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
-
 	
+	
+	private MessageFlowProxy flow = null;
+	private String alert = null;
+	private String fireAndForget = null;
+	private String alertQueue = null;
+	private String alertQueueMgr = null;
+	private String incidentArea = null;
+
 	/* (non-Javadoc)
 	 * @see com.anz.common.compute.impl.CommonJavaCompute#execute(com.ibm.broker.plugin.MbMessageAssembly, com.ibm.broker.plugin.MbMessageAssembly)
 	 */
@@ -38,8 +50,12 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 			 * Only for HTTP flows and when the error is not already set something else
 			 * This block will be executed for internal errors in transformation such as NullPointerExceptions etc. 
 			 */
+			
+			// Refresh UDPs
+			refreshUDPs();
+			
 			TransformType transformType = getTransformationType();
-			String fireAndForget = (String) getUserDefinedAttribute("FIRE_AND_FORGET");
+
 			if((transformType.equals(TransformType.HTTP_HHTP) || transformType.equals(TransformType.HTTP_MQ))
 					&& outMessage.getRootElement().getFirstElementByPath("HTTPResponseHeader") == null) {				
 				
@@ -80,7 +96,8 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 	protected void propagateToAlertQueueIfApplicable(MbMessageAssembly inAssembly, 
 			String outputJson) throws Exception {
 		
-		if("true".equalsIgnoreCase((String) getUserDefinedAttribute("ALERT"))) {
+		
+		if("true".equalsIgnoreCase(alert)) {
 			
 			MbMessage outMessage = new MbMessage();
 			MbMessageAssembly outAssembly = new MbMessageAssembly(inAssembly, outMessage);
@@ -93,11 +110,12 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 			
 			ComputeUtils.removeElementFromTree(outAssembly.getMessage(), "HTTPInputHeader");
 			
-			ComputeUtils.setElementInTree((String) getUserDefinedAttribute("ALERT_QUEUE_MGR"), outAssembly.getLocalEnvironment(), "Destination", "MQ", "DestinationData", "queueManagerName");
-			ComputeUtils.setElementInTree((String) getUserDefinedAttribute("ALERT_QUEUE"), outAssembly.getLocalEnvironment(), "Destination","MQ","DestinationData", "queueName" );
+			ComputeUtils.setElementInTree(alertQueueMgr, outAssembly.getLocalEnvironment(), "Destination", "MQ", "DestinationData", "queueManagerName");
+			ComputeUtils.setElementInTree(alertQueue, outAssembly.getLocalEnvironment(), "Destination","MQ","DestinationData", "queueName" );
 			
 			MbOutputTerminal alt = getOutputTerminal("alternate");
 			alt.propagate(outAssembly);
+			
 		}
 		
 	}
@@ -148,7 +166,7 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 			metadata.setMessageId(transactionId);
 		}
 		
-		metadata.addUserDefinedProperty("IncidentArea", (String) getUserDefinedAttribute("INCIDENT_AREA"));
+		metadata.addUserDefinedProperty("IncidentArea", incidentArea);
 		
 	}
 
@@ -163,8 +181,9 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 		super.executeAfterTransformation(metadata, inAssembly, outAssembly);		
 
 		TransformType transformType = getTransformationType();
+
 		
-		if("true".equalsIgnoreCase((String) getUserDefinedAttribute("FIRE_AND_FORGET"))) {
+		if("true".equalsIgnoreCase(fireAndForget)) {
 			logger.info("Fire and forget pattern");
 			if(transformType.equals(TransformType.MQ_MQ) || transformType.equals(TransformType.MQ_HTTP)) {
 				logger.info("Setting output node to none");
@@ -201,6 +220,38 @@ public abstract class CommonErrorTransformCompute extends CommonJavaCompute {
 	protected void transformSuccessMessageForFireAndForget(MbMessageAssembly outAssembly) throws Exception {
 		
 		ComputeUtils.removeMessageBody(outAssembly.getMessage());
+		
+	}
+	
+	private void refreshUDPs(){
+		
+		logger.info("Refresh UDPs");
+		
+		
+		try {
+			
+			// Get message flow proxy
+			flow = ComputeUtils.getFlowProxy(getBroker().getName(), getExecutionGroup().getName(), getMessageFlow().getApplicationName(), getMessageFlow().getName());
+			logger.info("flow = {}", flow.toString());
+			
+			// Get user defined properties
+			this.alert = (String) flow.getUserDefinedProperty("ALERT");
+			this.fireAndForget = (String) flow.getUserDefinedProperty("FIRE_AND_FORGET");
+			this.alertQueue = (String) flow.getUserDefinedProperty("ALERT_QUEUE");
+			this.alertQueueMgr = (String) flow.getUserDefinedProperty("ALERT_QUEUE_MGR");
+			this.incidentArea = (String) flow.getUserDefinedProperty("INCIDENT_AREA");
+			
+			logger.info("ALERT = {}", alert);
+			logger.info("FIRE_AND_FORGET = {}", fireAndForget);
+			logger.info("ALERT_QUEUE = {}", alertQueue);
+			logger.info("ALERT_QUEUE_MANAGER = {}", alertQueueMgr);
+			logger.info("INCIDENT_AREA = {}", incidentArea);
+			
+		} catch (Exception e) {
+			
+			logger.throwing(e);
+			
+		} 
 		
 	}
 	

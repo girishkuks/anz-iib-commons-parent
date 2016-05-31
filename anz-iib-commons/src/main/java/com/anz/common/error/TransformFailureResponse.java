@@ -48,7 +48,7 @@ public class TransformFailureResponse implements
 		}
 		
 		String errorString = null;
-		if((exceptionText.toLowerCase().contains("timeout")) || (exceptionText == null && messageString== null)) {
+		if((exceptionText == null && messageString== null) || (exceptionText.toLowerCase().contains("timeout"))) {
 			// This is a timeout on MQ
 			errorString = ErrorStatusCode.TimeoutException;
 		} else {	
