@@ -293,6 +293,26 @@ public class ComputeUtils {
 		
 		try {
 			MbElement messageRoot = inAssembly.getMessage().getRootElement();
+			MbElement requestIdentifierElem = inAssembly.getLocalEnvironment().getRootElement().getFirstElementByPath("/Destination/HTTP/RequestIdentifier");
+			if(requestIdentifierElem != null) {
+				byte[] bytes = (byte[]) requestIdentifierElem.getValue();
+				requestIdentifier = new String(bytes);
+			} else {
+				requestIdentifierElem = messageRoot.getFirstElementByPath("/MQMD/CorrelId");
+				requestIdentifier = requestIdentifierElem != null? requestIdentifierElem.getValueAsString(): requestIdentifier;
+			}
+		} catch(Exception e) { logger.throwing(e); }
+		
+		if(requestIdentifier != null) {
+			transactionId = CacheHandlerFactory.getInstance().lookupCache(CacheHandlerFactory.TransactionIdCache, requestIdentifier);
+			logger.debug("Transaction Id found in cache");
+			if(transactionId != null) {
+				return transactionId;
+			}
+		}
+		
+		try {
+			MbElement messageRoot = inAssembly.getMessage().getRootElement();
 			for(String path: paths) {
 				logger.debug("Looking for id in {}", path);
 				MbElement transactionIdElem = messageRoot.getFirstElementByPath(path);
@@ -304,26 +324,11 @@ public class ComputeUtils {
 			}
 		} catch(Exception e) { logger.throwing(e); }
 		
-		try {
-			MbElement messageRoot = inAssembly.getMessage().getRootElement();
-			MbElement requestIdentifierElem = inAssembly.getLocalEnvironment().getRootElement().getFirstElementByPath("/Destination/HTTP/RequestIdentifier");
-			if(requestIdentifierElem != null) {
-				byte[] bytes = (byte[]) requestIdentifierElem.getValue();
-				requestIdentifier = new String(bytes);
-			} else {
-				requestIdentifierElem = messageRoot.getFirstElementByPath("/MQMD/CorrelId");
-				requestIdentifier = requestIdentifierElem != null? requestIdentifierElem.getValueAsString(): requestIdentifier;
-			}
-		} catch(Exception e) { logger.throwing(e); }
-		
 		if(requestIdentifier == null) {
 			logger.info("requestIdentifier/CorrelId not found to update transaction id in the cache");
 			return transactionId;
 		} else if(transactionId != null) {
 			CacheHandlerFactory.getInstance().updateCache(CacheHandlerFactory.TransactionIdCache, requestIdentifier, transactionId);
-		} else {
-			transactionId = CacheHandlerFactory.getInstance().lookupCache(CacheHandlerFactory.TransactionIdCache, requestIdentifier);
-			logger.debug("Transaction Id found in cache");
 		}
 		
 		if(transactionId == null) {
