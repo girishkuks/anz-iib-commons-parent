@@ -27,9 +27,6 @@ public class IFXCode implements ICommonEntity {
 	private String status;
 	
 	private String descr;
-	
-	@OneToMany(mappedBy="ifxCode")
-	private List<IFXProviderCode> ifxProviderCodes;
 
 	public String getCode() {
 		return code;
@@ -63,13 +60,6 @@ public class IFXCode implements ICommonEntity {
 		this.descr = descr;
 	}
 
-	public List<IFXProviderCode> getIfxProviderCodes() {
-		return ifxProviderCodes;
-	}
-	
-	public void setIfxProviderCodes(List<IFXProviderCode> ifxProviderCodes) {
-		this.ifxProviderCodes = ifxProviderCodes;
-	}
 
 	/* (non-Javadoc)
 	 * @see com.anz.common.dataaccess.ICommonEntity#getKey()
