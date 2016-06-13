@@ -5,28 +5,32 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.anz</groupId>
-    <artifactId>common-libraries</artifactId>
+    <artifactId>anz-iib-commons-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
+    
+     <properties>
+      <scm.url>https://master@10.52.36.21:8443/r/iib/anz-iib-commons-parent.git</scm.url>
+     </properties>
  
-
     <modules>
 		<module>anz-iib-dependencies</module>
 		<module>anz-iib-commons</module>
 		<module>anz-iib-commons-lib</module>
+		<module>package</module>
     </modules>
 
 	<distributionManagement>
                 <repository>
                         <id>release</id>
-                        <url>http://localhost:8081/artifactory/ext-release-local</url>
+                        <url>http://centralrepository.anz.com:8081/artifactory/ext-release-local</url>
                         <uniqueVersion>true</uniqueVersion>
                 </repository>
                 <snapshotRepository>
                         <id>snapshot</id>
-                        <url>http://localhost:8081/artifactory/ext-snapshot-local</url>
+                        <url>http://centralrepository.anz.com:8081/artifactory/ext-snapshot-local</url>
                         <uniqueVersion>true</uniqueVersion>
                 </snapshotRepository>
-        </distributionManagement>
+    </distributionManagement>
 
 </project>
