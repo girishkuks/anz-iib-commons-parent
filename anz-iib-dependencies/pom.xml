@@ -40,34 +40,6 @@
 		<artifactId>db2jcc_license_cu</artifactId>
 		<version>10.0.0.4</version>
 	</dependency>
-
-	<!-- IIB JARS -->
-
-	<dependency>
-		<groupId>com.ibm.broker.config.proxy</groupId>
-		<artifactId>IntegrationAPI</artifactId>
-		<version>10.0.0.4</version>
-	</dependency>
-	<dependency>
-		<groupId>com.ibm.broker</groupId>
-		<artifactId>bipbroker</artifactId>
-		<version>10.0.0.4</version>
-	</dependency>
-	<dependency>
-		<groupId>com.ibm.jdbcnodes</groupId>
-		<artifactId>jdbcnodes</artifactId>
-		<version>10.0.0.4</version>
-	</dependency>
-	<dependency>
-		<groupId>com.ibm.etools.mft.jcn</groupId>
-		<artifactId>jplugin2</artifactId>
-		<version>10.0.0.4</version>
-	</dependency>
-	<dependency>
-		<groupId>com.ibm.etools.mft.jcn</groupId>
-		<artifactId>javacompute</artifactId>
-		<version>10.0.0.4</version>
-	</dependency>
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
