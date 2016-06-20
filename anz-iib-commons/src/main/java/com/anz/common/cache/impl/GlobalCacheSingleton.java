@@ -1,6 +1,9 @@
 package com.anz.common.cache.impl;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -19,10 +22,28 @@ public class GlobalCacheSingleton {
 				JAXBContext jaxbContext = JAXBContext
 						.newInstance(GlobalCacheSettings.class);
 				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-				URL resource = GlobalCacheSingleton.class
+				
+				URL resource = null;
+				
+				String path =  System.getenv("CACHE_CONFIG");
+				logger.info("System property CACHE_CONFIG={}",path);
+				File configFile = new File(path + "/" + "global-cache.xml");
+				if(configFile.exists()) {
+					try {
+						resource =  configFile.toURI().toURL();
+					} catch (MalformedURLException e) {
+						logger.throwing(e);
+					}
+				} else {
+				
+					resource = GlobalCacheSingleton.class
 						.getResource("global-cache.xml");
-				globalcacheSettings = (GlobalCacheSettings) unmarshaller
+				}
+				
+				if(resource != null) {
+					globalcacheSettings = (GlobalCacheSettings) unmarshaller
 						.unmarshal(resource);
+				}
 			} catch (JAXBException e) {
 				logger.throwing(e);
 			}

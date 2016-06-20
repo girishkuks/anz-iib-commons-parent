@@ -3,31 +3,21 @@
  */
 package com.anz.common.cache.impl;
 
-import java.io.InputStream;
+import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import javax.cache.Cache;
-import javax.cache.Caching;
 import javax.cache.configuration.MutableConfiguration;
-import javax.cache.expiry.Duration;
-import javax.cache.expiry.ModifiedExpiryPolicy;
-import javax.cache.spi.CachingProvider;
 import javax.management.MBeanServer;
-
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-
-import net.sf.ehcache.hibernate.management.api.EhcacheStats;
-import net.sf.ehcache.management.ManagementService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ehcache.jcache.JCacheManagementMXBean;
 import org.ehcache.jcache.JCacheManager;
+
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.management.ManagementService;
 
 /**
  * ehCache Cache Handler in JCashe JSR107 standard API
@@ -120,12 +110,23 @@ public class LocalCacheHandler extends AbstractCacheHandler {
 
 	@Override
 	public String getCacheManagerURI() {
-		URL resource = LocalCacheHandler.class.getResource("ehcache-localcache.xml");
-        if(resource != null) {
-            return resource.toString();
-        } else {
-        	logger.warn("Could not load the resource {}", "ehcache-localcache.xml");
-        }
+		String path =  System.getenv("CACHE_CONFIG");
+		logger.info("System property CACHE_CONFIG={}",path);
+		File configFile = new File(path + "/" + "ehcache-localcache.xml");
+		if(configFile.exists()) {
+			try {
+				return configFile.toURI().toURL().toString();
+			} catch (MalformedURLException e) {
+				logger.throwing(e);
+			}
+		} else {
+			URL resource = LocalCacheHandler.class.getResource("ehcache-localcache.xml");
+			if(resource != null) {
+				logger.warn("Loading a backup config file={}",resource);
+	            return resource.toString();
+			}
+		}
+		logger.warn("Could not load the resource {}", "ehcache-localcache.xml");        
         return null;
 	}
 	
